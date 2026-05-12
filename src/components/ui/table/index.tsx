@@ -43,6 +43,15 @@ const TableCell: React.FC<TableCellProps> = ({
   return <CellTag className={` ${className}`} colSpan={colSpan}>{children}</CellTag>;
 };
 
+// Table Component
+const Table: React.FC<TableProps> = ({ children, className }) => {
+  return (
+    <div className="relative overflow-auto">
+      <table className={`w-full caption-bottom text-sm ${className ?? ""}`}>{children}</table>
+    </div>
+  );
+};
+
 // TableHeader Component
 const TableHeader: React.FC<TableHeaderProps> = ({ children, className }) => {
   return <thead className={className}>{children}</thead>;
