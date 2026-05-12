@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah } from "@/lib/db";
+import { formatRupiah } from "@/lib/utils";
 
 interface PendapatanRow {
   bulan: string;

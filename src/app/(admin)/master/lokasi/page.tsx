@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 export const metadata: Metadata = { title: "Lokasi Proyek | Sistem Sewa Alat Berat" };
 export const dynamic = "force-dynamic";
 
 export default async function LokasiPage() {
+  const sql = getDb();
   const data = await sql`SELECT * FROM project_locations ORDER BY kode`;
   return (
     <div className="space-y-5">

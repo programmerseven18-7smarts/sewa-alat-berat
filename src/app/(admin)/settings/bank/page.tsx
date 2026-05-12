@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -7,6 +7,7 @@ export const metadata: Metadata = { title: "Rekening Bank | Sistem Sewa Alat Ber
 export const dynamic = "force-dynamic";
 
 export default async function BankPage() {
+  const sql = getDb();
   const data = await sql`SELECT * FROM bank_accounts ORDER BY is_default DESC, nama_bank ASC`;
 
   return (

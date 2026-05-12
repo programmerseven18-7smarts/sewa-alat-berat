@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah, formatDate } from "@/lib/db";
+import { formatRupiah, formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Laporan Piutang | Sistem Sewa Alat Berat" };
 export const dynamic = "force-dynamic";
 
 export default async function LaporanPiutangPage() {
+  const sql = getDb();
   const data = await sql`
     SELECT
       inv.no_invoice, c.nama AS customer_nama, inv.tanggal, inv.jatuh_tempo,

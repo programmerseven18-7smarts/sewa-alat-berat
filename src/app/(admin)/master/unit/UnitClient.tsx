@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah } from "@/lib/db";
+import { formatRupiah } from "@/lib/utils";
 
 interface Unit {
   id: number;

@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../ui/table";
 import Badge from "../ui/badge/Badge";
-import { formatRupiah, formatDate } from "@/lib/db";
+import { formatRupiah, formatDate } from "@/lib/utils";
 
 interface Contract {
   no_kontrak: string;

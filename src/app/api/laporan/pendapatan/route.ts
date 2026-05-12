@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 
 export async function GET(req: NextRequest) {
+  const sql = getDb();
   const tahun = new URL(req.url).searchParams.get("tahun") || new Date().getFullYear().toString();
   try {
     const data = await sql`

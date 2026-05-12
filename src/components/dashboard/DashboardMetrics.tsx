@@ -2,7 +2,7 @@
 import React from "react";
 import Badge from "../ui/badge/Badge";
 import { ArrowUpIcon, ArrowDownIcon } from "@/icons";
-import { formatRupiah } from "@/lib/db";
+import { formatRupiah } from "@/lib/utils";
 
 interface DashboardStats {
   unitStats: { on_duty: string; stand_by: string; break_down: string; maintenance: string; total: string };

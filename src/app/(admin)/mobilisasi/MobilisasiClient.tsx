@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah, formatDate } from "@/lib/db";
+import { formatRupiah, formatDate } from "@/lib/utils";
 
 interface Mobilisasi {
   id: number;

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 export const metadata: Metadata = { title: "Master Driver | Sistem Sewa Alat Berat" };
 export const dynamic = "force-dynamic";
 
 export default async function DriverPage() {
+  const sql = getDb();
   const data = await sql`SELECT * FROM drivers ORDER BY nama`;
   return (
     <div className="space-y-5">
