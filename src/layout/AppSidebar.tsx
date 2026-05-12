@@ -6,14 +6,10 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
   BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PageIcon,
   PieChartIcon,
-  PlugInIcon,
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
@@ -30,35 +26,82 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    path: "/",
   },
   {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 3H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+      </svg>
+    ),
+    name: "Master Data",
     subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
+      { name: "Unit Alat Berat", path: "/master/unit" },
+      { name: "Kategori Alat", path: "/master/kategori" },
+      { name: "Lokasi Proyek", path: "/master/lokasi" },
+      { name: "Customer", path: "/master/customer" },
+      { name: "Operator", path: "/master/operator" },
+      { name: "Driver", path: "/master/driver" },
+      { name: "Supplier", path: "/master/supplier" },
+      { name: "Spare Part", path: "/master/sparepart" },
+    ],
+  },
+  {
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15h8v2H8v-2zm0-4h8v2H8v-2z"/>
+      </svg>
+    ),
+    name: "Transaksi Sewa",
+    subItems: [
+      { name: "Permintaan Sewa", path: "/sewa/permintaan" },
+      { name: "Penawaran", path: "/sewa/penawaran" },
+      { name: "Kontrak Sewa", path: "/sewa/kontrak" },
+    ],
+  },
+  {
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+      </svg>
+    ),
+    name: "Invoice & Pembayaran",
+    subItems: [
+      { name: "Daftar Invoice", path: "/keuangan/invoice" },
+      { name: "Pembayaran", path: "/keuangan/pembayaran" },
+    ],
+  },
+  {
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-.5 1.5 1.96 2.5H17V9.5h2.5zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm2.22-3c-.55-.61-1.33-1-2.22-1s-1.67.39-2.22 1H3V6h12v9H8.22zM18 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>
+      </svg>
+    ),
+    name: "Mobilisasi",
+    path: "/mobilisasi",
+  },
+  {
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+      </svg>
+    ),
+    name: "Operasional",
+    subItems: [
+      { name: "Laporan Harian", path: "/operasional/laporan-harian" },
+      { name: "Konsumsi BBM", path: "/operasional/bbm" },
+    ],
+  },
+  {
+    icon: (
+      <svg className="fill-current" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+      </svg>
+    ),
+    name: "Maintenance",
+    subItems: [
+      { name: "Work Order", path: "/maintenance/work-order" },
+      { name: "Jadwal Service", path: "/maintenance/jadwal" },
     ],
   },
 ];
@@ -66,30 +109,34 @@ const navItems: NavItem[] = [
 const othersItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
-    name: "Charts",
+    name: "Laporan",
     subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
+      { name: "Laporan Pendapatan", path: "/laporan/pendapatan" },
+      { name: "Laporan Unit", path: "/laporan/unit" },
+      { name: "Laporan Piutang", path: "/laporan/piutang" },
+    ],
+  },
+  {
+    icon: <TableIcon />,
+    name: "Rekap Data",
+    subItems: [
+      { name: "Rekap Kontrak", path: "/rekap/kontrak" },
+      { name: "Rekap Maintenance", path: "/rekap/maintenance" },
+    ],
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: "Pengaturan",
+    subItems: [
+      { name: "Manajemen User", path: "/settings/users" },
+      { name: "Rekening Bank", path: "/settings/bank" },
     ],
   },
   {
     icon: <BoxCubeIcon />,
-    name: "UI Elements",
+    name: "Template",
     subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
+      { name: "Sign In", path: "/signin" },
     ],
   },
 ];
