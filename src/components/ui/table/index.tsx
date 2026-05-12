@@ -29,11 +29,18 @@ interface TableCellProps {
   children: ReactNode; // Cell content
   isHeader?: boolean; // If true, renders as <th>, otherwise <td>
   className?: string; // Optional className for styling
+  colSpan?: number; // Optional colspan for empty/loading rows
 }
 
-// Table Component
-const Table: React.FC<TableProps> = ({ children, className }) => {
-  return <table className={`min-w-full  ${className}`}>{children}</table>;
+// TableCell Component
+const TableCell: React.FC<TableCellProps> = ({
+  children,
+  isHeader = false,
+  className,
+  colSpan,
+}) => {
+  const CellTag = isHeader ? "th" : "td";
+  return <CellTag className={` ${className}`} colSpan={colSpan}>{children}</CellTag>;
 };
 
 // TableHeader Component

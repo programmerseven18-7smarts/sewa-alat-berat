@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 async function getDashboardData() {
   const [unitStats] = await sql`
