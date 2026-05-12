@@ -23,7 +23,7 @@ export default async function DriverPage() {
             </TableRow>
           </TableHeader>
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {data.map((r: { id: number; kode: string; nama: string; no_ktp: string; telepon: string; no_sim: string; status: string }) => (
+            {data.map((r: any) => (
               <TableRow key={r.id} className="hover:bg-gray-50 dark:hover:bg-white/[0.02]">
                 <TableCell className="py-3 px-4 font-mono text-xs font-semibold text-brand-600 dark:text-brand-400">{r.kode}</TableCell>
                 <TableCell className="py-3 px-4 font-medium text-gray-800 dark:text-white/90">{r.nama}</TableCell>
