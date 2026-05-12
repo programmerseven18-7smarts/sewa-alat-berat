@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatDate } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 
 interface JadwalUnit {
   id: number;

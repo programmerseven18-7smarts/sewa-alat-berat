@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah, formatDate } from "@/lib/db";
+import { formatRupiah, formatDate } from "@/lib/utils";
 
 interface FuelLog {
   id: number;

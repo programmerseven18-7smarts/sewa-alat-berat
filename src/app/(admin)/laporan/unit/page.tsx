@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import Badge from "@/components/ui/badge/Badge";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { formatRupiah } from "@/lib/db";
+import { formatRupiah } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Laporan Unit | Sistem Sewa Alat Berat" };
 export const dynamic = "force-dynamic";
 
 export default async function LaporanUnitPage() {
+  const sql = getDb();
   const data = await sql`
     SELECT
       eu.kode_lambung, eu.merk, eu.model, eu.status,

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import DashboardMetrics from "@/components/dashboard/DashboardMetrics";
 import RevenueChart from "@/components/dashboard/RevenueChart";
 import UnitStatusChart from "@/components/dashboard/UnitStatusChart";
@@ -15,6 +15,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getDashboardData() {
+  const sql = getDb();
   const [unitStats] = await sql`
     SELECT
       COUNT(*) FILTER (WHERE status = 'On Duty') AS on_duty,

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 
 export async function GET(req: NextRequest) {
+  const sql = getDb();
   const search = new URL(req.url).searchParams.get("search") || "";
   try {
     const data = await sql`
@@ -18,6 +19,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const sql = getDb();
   const body = await req.json();
   try {
     const [row] = await sql`

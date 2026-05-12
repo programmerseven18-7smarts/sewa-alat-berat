@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import sql from "@/lib/db";
+import getDb from "@/lib/db";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 export const metadata: Metadata = { title: "Kategori Alat | Sistem Sewa Alat Berat" };
 export const dynamic = "force-dynamic";
 
 export default async function KategoriPage() {
+  const sql = getDb();
   const data = await sql`SELECT * FROM equipment_categories ORDER BY kode`;
   return (
     <div className="space-y-5">
