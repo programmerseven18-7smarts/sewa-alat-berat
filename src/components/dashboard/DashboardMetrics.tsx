@@ -47,7 +47,7 @@ const MetricCard = ({
 );
 
 export default function DashboardMetrics({ stats }: { stats: DashboardStats }) {
-  const { unitStats, contractStats, invoiceStats, paymentStats } = stats;
+  const { unitStats, contractStats, invoiceStats } = stats;
   const utilization = unitStats.total
     ? Math.round((Number(unitStats.on_duty) / Number(unitStats.total)) * 100)
     : 0;
@@ -85,7 +85,7 @@ export default function DashboardMetrics({ stats }: { stats: DashboardStats }) {
         label="Piutang Outstanding"
         value={formatRupiah(Number(invoiceStats.piutang))}
         sub="belum terbayar"
-        badge="perlu tindak lanjut"
+        // badge="perlu tindak lanjut"
         badgeColor="warning"
       />
       <MetricCard

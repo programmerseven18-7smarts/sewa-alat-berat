@@ -1,0 +1,530 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           Int        @id @default(autoincrement())
+  nama         String
+  username     String     @unique
+  email        String?    @unique
+  passwordHash String?    @map("password_hash")
+  role         String     @default("viewer")
+  status       String     @default("Aktif")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  userRoles    UserRole[]
+  auditLogs    AuditLog[]
+
+  @@map("users")
+}
+
+model Role {
+  id              Int              @id @default(autoincrement())
+  kode            String           @unique
+  nama            String
+  deskripsi       String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id              Int              @id @default(autoincrement())
+  kode            String           @unique
+  modul           String
+  aksi            String
+  deskripsi       String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  roleId    Int      @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  id           Int        @id @default(autoincrement())
+  roleId       Int        @map("role_id")
+  permissionId Int        @map("permission_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model EquipmentCategory {
+  id          Int             @id @default(autoincrement())
+  kode        String          @unique
+  nama        String
+  deskripsi   String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  units       EquipmentUnit[]
+  rentalRates RentalRate[]
+
+  @@map("equipment_categories")
+}
+
+model ProjectLocation {
+  id              Int              @id @default(autoincrement())
+  kode            String           @unique
+  nama            String
+  alamat          String?
+  kota            String?
+  provinsi        String?
+  picNama         String?          @map("pic_nama")
+  picTelepon      String?          @map("pic_telepon")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  units           EquipmentUnit[]
+  rentalContracts RentalContract[]
+
+  @@map("project_locations")
+}
+
+model Customer {
+  id              Int              @id @default(autoincrement())
+  kode            String           @unique
+  nama            String
+  picNama         String?          @map("pic_nama")
+  telepon         String?
+  email           String?
+  alamat          String?
+  kota            String?
+  npwp            String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  invoices        Invoice[]
+  quotations      Quotation[]
+  rentalContracts RentalContract[]
+  rentalRequests  RentalRequest[]
+
+  @@map("customers")
+}
+
+model Supplier {
+  id                Int                @id @default(autoincrement())
+  kode              String             @unique
+  nama              String
+  picNama           String?            @map("pic_nama")
+  telepon           String?
+  email             String?
+  alamat            String?
+  createdAt         DateTime           @default(now()) @map("created_at")
+  maintenanceOrders MaintenanceOrder[]
+  spareparts        Sparepart[]
+
+  @@map("suppliers")
+}
+
+model EquipmentUnit {
+  id                Int                @id @default(autoincrement())
+  kodeLambung       String             @unique @map("kode_lambung")
+  categoryId        Int?               @map("category_id")
+  merk              String
+  model             String
+  tahun             Int?
+  noPolisi          String?            @map("no_polisi")
+  noChassis         String?            @map("no_chassis")
+  noMesin           String?            @map("no_mesin")
+  status            String             @default("Stand By")
+  locationId        Int?               @map("location_id")
+  tarifHarian       Decimal            @default(0) @map("tarif_harian") @db.Decimal(18, 2)
+  tarifBulanan      Decimal            @default(0) @map("tarif_bulanan") @db.Decimal(18, 2)
+  catatan           String?
+  photoUrl          String?            @map("photo_url")
+  currentHm         Decimal?           @map("current_hm") @db.Decimal(12, 2)
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  category          EquipmentCategory? @relation(fields: [categoryId], references: [id])
+  location          ProjectLocation?   @relation(fields: [locationId], references: [id])
+  dailyReports      DailyReport[]
+  fuelLogs          FuelLog[]
+  maintenanceOrders MaintenanceOrder[]
+  mobilisasi        Mobilisasi[]
+  operators         Operator[]
+  quotations        Quotation[]
+  rentalContracts   RentalContract[]
+  unitSaleHpps      UnitSaleHpp[]
+
+  @@map("equipment_units")
+}
+
+model Operator {
+  id              Int              @id @default(autoincrement())
+  kode            String           @unique
+  nama            String
+  noKtp           String?          @map("no_ktp")
+  telepon         String?
+  simType         String?          @map("sim_type")
+  simNo           String?          @map("sim_no")
+  status          String           @default("Aktif")
+  unitId          Int?             @map("unit_id")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  dailyReports    DailyReport[]
+  rentalContracts RentalContract[]
+  unit            EquipmentUnit?   @relation(fields: [unitId], references: [id])
+
+  @@map("operators")
+}
+
+model Driver {
+  id          Int           @id @default(autoincrement())
+  kode        String        @unique
+  nama        String
+  noKtp       String?       @map("no_ktp")
+  telepon     String?
+  noSim       String?       @map("no_sim")
+  status      String        @default("Aktif")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  mobilisasi  Mobilisasi[]
+
+  @@map("drivers")
+}
+
+model Sparepart {
+  id               Int               @id @default(autoincrement())
+  kode             String            @unique
+  nama             String
+  satuan           String?
+  hargaSatuan      Decimal           @default(0) @map("harga_satuan") @db.Decimal(18, 2)
+  stok             Decimal           @default(0) @db.Decimal(18, 2)
+  supplierId       Int?              @map("supplier_id")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  supplier         Supplier?         @relation(fields: [supplierId], references: [id])
+  maintenanceParts MaintenancePart[]
+
+  @@map("spareparts")
+}
+
+model RentalRate {
+  id         Int                @id @default(autoincrement())
+  categoryId Int?              @map("category_id")
+  nama       String
+  satuan     String
+  tarif      Decimal           @default(0) @db.Decimal(18, 2)
+  minimum    Decimal?          @db.Decimal(18, 2)
+  catatan    String?
+  createdAt  DateTime          @default(now()) @map("created_at")
+  category   EquipmentCategory? @relation(fields: [categoryId], references: [id])
+
+  @@map("rental_rates")
+}
+
+model BankAccount {
+  id           Int       @id @default(autoincrement())
+  namaBank     String    @map("nama_bank")
+  cabang       String?
+  noRekening   String    @map("no_rekening")
+  atasNama     String    @map("atas_nama")
+  isDefault    Boolean   @default(false) @map("is_default")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  invoices     Invoice[]
+  payments     Payment[]
+  receipts     Receipt[]
+
+  @@map("bank_accounts")
+}
+
+model RentalRequest {
+  id           Int       @id @default(autoincrement())
+  noPermintaan String    @unique @map("no_permintaan")
+  customerId   Int?      @map("customer_id")
+  tanggal      DateTime  @db.Date
+  lokasi       String?
+  jenisAlat    String?   @map("jenis_alat")
+  mulaiSewa    DateTime? @map("mulai_sewa") @db.Date
+  akhirSewa    DateTime? @map("akhir_sewa") @db.Date
+  estimasiJam  Decimal?  @map("estimasi_jam") @db.Decimal(12, 2)
+  status       String    @default("Pending")
+  catatan      String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  customer     Customer? @relation(fields: [customerId], references: [id])
+
+  @@map("rental_requests")
+}
+
+model Quotation {
+  id             Int            @id @default(autoincrement())
+  noPenawaran    String         @unique @map("no_penawaran")
+  customerId     Int            @map("customer_id")
+  tanggal        DateTime       @db.Date
+  berlakuHingga  DateTime?      @map("berlaku_hingga") @db.Date
+  unitId         Int?           @map("unit_id")
+  tarif          Decimal        @default(0) @db.Decimal(18, 2)
+  satuan         String?
+  estimasiTotal  Decimal        @default(0) @map("estimasi_total") @db.Decimal(18, 2)
+  status         String         @default("Draft")
+  catatan        String?
+  createdAt      DateTime       @default(now()) @map("created_at")
+  customer       Customer       @relation(fields: [customerId], references: [id])
+  unit           EquipmentUnit? @relation(fields: [unitId], references: [id])
+
+  @@map("quotations")
+}
+
+model RentalContract {
+  id              Int              @id @default(autoincrement())
+  noKontrak       String           @unique @map("no_kontrak")
+  customerId      Int              @map("customer_id")
+  unitId          Int              @map("unit_id")
+  operatorId      Int?             @map("operator_id")
+  locationId      Int?             @map("location_id")
+  tanggalKontrak  DateTime         @map("tanggal_kontrak") @db.Date
+  mulaiSewa       DateTime         @map("mulai_sewa") @db.Date
+  akhirSewa       DateTime?        @map("akhir_sewa") @db.Date
+  tarif           Decimal          @default(0) @db.Decimal(18, 2)
+  satuan          String           @default("Hari")
+  nilaiKontrak    Decimal          @default(0) @map("nilai_kontrak") @db.Decimal(18, 2)
+  dp              Decimal          @default(0) @db.Decimal(18, 2)
+  status          String           @default("Aktif")
+  catatan         String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  customer        Customer         @relation(fields: [customerId], references: [id])
+  location        ProjectLocation? @relation(fields: [locationId], references: [id])
+  operator        Operator?        @relation(fields: [operatorId], references: [id])
+  unit            EquipmentUnit    @relation(fields: [unitId], references: [id])
+  dailyReports    DailyReport[]
+  fuelLogs        FuelLog[]
+  invoices        Invoice[]
+  mobilisasi      Mobilisasi[]
+
+  @@map("rental_contracts")
+}
+
+model Invoice {
+  id            Int             @id @default(autoincrement())
+  noInvoice     String          @unique @map("no_invoice")
+  contractId    Int?            @map("contract_id")
+  customerId    Int             @map("customer_id")
+  tanggal       DateTime        @db.Date
+  jatuhTempo    DateTime?       @map("jatuh_tempo") @db.Date
+  tipe          String          @default("Sewa")
+  subtotal      Decimal         @default(0) @db.Decimal(18, 2)
+  pajak         Decimal         @default(0) @db.Decimal(18, 2)
+  total         Decimal         @default(0) @db.Decimal(18, 2)
+  status        String          @default("Belum Lunas")
+  bankAccountId Int?            @map("bank_account_id")
+  catatan       String?
+  createdAt     DateTime        @default(now()) @map("created_at")
+  bankAccount   BankAccount?    @relation(fields: [bankAccountId], references: [id])
+  contract      RentalContract? @relation(fields: [contractId], references: [id])
+  customer      Customer        @relation(fields: [customerId], references: [id])
+  items         InvoiceItem[]
+  payments      Payment[]
+  receipts      Receipt[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          Int      @id @default(autoincrement())
+  invoiceId   Int      @map("invoice_id")
+  deskripsi   String
+  volume      Decimal  @default(1) @db.Decimal(12, 2)
+  satuan      String?
+  hargaSatuan Decimal  @default(0) @map("harga_satuan") @db.Decimal(18, 2)
+  total       Decimal  @default(0) @db.Decimal(18, 2)
+  createdAt   DateTime @default(now()) @map("created_at")
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@map("invoice_items")
+}
+
+model Payment {
+  id            Int          @id @default(autoincrement())
+  noPembayaran  String       @unique @map("no_pembayaran")
+  invoiceId     Int          @map("invoice_id")
+  tanggal       DateTime     @db.Date
+  jumlah        Decimal      @default(0) @db.Decimal(18, 2)
+  metode        String       @default("Transfer")
+  bankAccountId Int?         @map("bank_account_id")
+  catatan       String?
+  createdAt     DateTime     @default(now()) @map("created_at")
+  bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+  invoice       Invoice      @relation(fields: [invoiceId], references: [id])
+
+  @@map("payments")
+}
+
+model Receipt {
+  id            Int          @id @default(autoincrement())
+  noKwitansi    String       @unique @map("no_kwitansi")
+  invoiceId     Int?         @map("invoice_id")
+  tanggal       DateTime     @db.Date
+  diterimaDari  String       @map("diterima_dari")
+  untukPembayaran String     @map("untuk_pembayaran")
+  jumlah        Decimal      @default(0) @db.Decimal(18, 2)
+  terbilang     String?
+  bankAccountId Int?         @map("bank_account_id")
+  penandatangan String?
+  createdAt     DateTime     @default(now()) @map("created_at")
+  bankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+  invoice       Invoice?     @relation(fields: [invoiceId], references: [id])
+
+  @@map("receipts")
+}
+
+model Mobilisasi {
+  id               Int             @id @default(autoincrement())
+  noMobilisasi     String          @unique @map("no_mobilisasi")
+  unitId           Int             @map("unit_id")
+  driverId         Int?            @map("driver_id")
+  contractId       Int?            @map("contract_id")
+  asalLokasi       String          @map("asal_lokasi")
+  tujuanLokasi     String          @map("tujuan_lokasi")
+  tanggalBerangkat DateTime        @map("tanggal_berangkat") @db.Date
+  tanggalTiba      DateTime?       @map("tanggal_tiba") @db.Date
+  biayaMobilisasi  Decimal         @default(0) @map("biaya_mobilisasi") @db.Decimal(18, 2)
+  biayaDemobilisasi Decimal        @default(0) @map("biaya_demobilisasi") @db.Decimal(18, 2)
+  status           String          @default("Direncanakan")
+  catatan          String?
+  fotoBerangkatUrl String?         @map("foto_berangkat_url")
+  fotoTibaUrl      String?         @map("foto_tiba_url")
+  buktiTransferUrl String?         @map("bukti_transfer_url")
+  createdAt        DateTime        @default(now()) @map("created_at")
+  contract         RentalContract? @relation(fields: [contractId], references: [id])
+  driver           Driver?         @relation(fields: [driverId], references: [id])
+  unit             EquipmentUnit   @relation(fields: [unitId], references: [id])
+
+  @@map("mobilisasi")
+}
+
+model DailyReport {
+  id          Int             @id @default(autoincrement())
+  contractId  Int?            @map("contract_id")
+  unitId      Int             @map("unit_id")
+  operatorId  Int?            @map("operator_id")
+  tanggal     DateTime        @db.Date
+  jamKerja    Decimal         @default(0) @map("jam_kerja") @db.Decimal(12, 2)
+  fuelLiter   Decimal         @default(0) @map("fuel_liter") @db.Decimal(12, 2)
+  hmAwal      Decimal?        @map("hm_awal") @db.Decimal(12, 2)
+  hmAkhir     Decimal?        @map("hm_akhir") @db.Decimal(12, 2)
+  aktivitas   String?
+  kendala     String?
+  createdAt   DateTime        @default(now()) @map("created_at")
+  contract    RentalContract? @relation(fields: [contractId], references: [id])
+  operator    Operator?       @relation(fields: [operatorId], references: [id])
+  unit        EquipmentUnit   @relation(fields: [unitId], references: [id])
+
+  @@map("daily_reports")
+}
+
+model FuelLog {
+  id            Int             @id @default(autoincrement())
+  unitId        Int             @map("unit_id")
+  contractId    Int?            @map("contract_id")
+  tanggal       DateTime        @db.Date
+  liter         Decimal         @default(0) @db.Decimal(12, 2)
+  hargaPerLiter Decimal         @default(0) @map("harga_per_liter") @db.Decimal(18, 2)
+  total         Decimal         @default(0) @db.Decimal(18, 2)
+  supplier      String?
+  catatan       String?
+  createdAt     DateTime        @default(now()) @map("created_at")
+  contract      RentalContract? @relation(fields: [contractId], references: [id])
+  unit          EquipmentUnit   @relation(fields: [unitId], references: [id])
+
+  @@map("fuel_logs")
+}
+
+model MaintenanceOrder {
+  id               Int               @id @default(autoincrement())
+  noWo             String            @unique @map("no_wo")
+  unitId           Int               @map("unit_id")
+  tipe             String            @default("Rutin")
+  tanggalMulai     DateTime?         @map("tanggal_mulai") @db.Date
+  tanggalSelesai   DateTime?         @map("tanggal_selesai") @db.Date
+  hmService        Decimal?          @map("hm_service") @db.Decimal(12, 2)
+  deskripsi        String
+  mekanik          String?
+  supplierId       Int?              @map("supplier_id")
+  status           String            @default("Open")
+  totalBiaya       Decimal           @default(0) @map("total_biaya") @db.Decimal(18, 2)
+  catatan          String?
+  createdAt        DateTime          @default(now()) @map("created_at")
+  maintenanceParts MaintenancePart[]
+  supplier         Supplier?         @relation(fields: [supplierId], references: [id])
+  unit             EquipmentUnit     @relation(fields: [unitId], references: [id])
+
+  @@map("maintenance_orders")
+}
+
+model MaintenancePart {
+  id                 Int              @id @default(autoincrement())
+  maintenanceOrderId Int              @map("maintenance_order_id")
+  sparepartId        Int?             @map("sparepart_id")
+  namaPart           String           @map("nama_part")
+  supplierNama       String?          @map("supplier_nama")
+  harga              Decimal          @default(0) @db.Decimal(18, 2)
+  qty                Decimal          @default(1) @db.Decimal(12, 2)
+  satuan             String?
+  total              Decimal          @default(0) @db.Decimal(18, 2)
+  fotoUrl            String?          @map("foto_url")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  maintenanceOrder   MaintenanceOrder @relation(fields: [maintenanceOrderId], references: [id], onDelete: Cascade)
+  sparepart          Sparepart?       @relation(fields: [sparepartId], references: [id])
+
+  @@map("maintenance_parts")
+}
+
+model UnitSaleHpp {
+  id              Int           @id @default(autoincrement())
+  unitId          Int           @map("unit_id")
+  noLaporan       String        @unique @map("no_laporan")
+  tanggal         DateTime      @db.Date
+  hppPembelian    Decimal       @default(0) @map("hpp_pembelian") @db.Decimal(18, 2)
+  biayaPerbaikan  Decimal       @default(0) @map("biaya_perbaikan") @db.Decimal(18, 2)
+  biayaMekanik    Decimal       @default(0) @map("biaya_mekanik") @db.Decimal(18, 2)
+  biayaCat        Decimal       @default(0) @map("biaya_cat") @db.Decimal(18, 2)
+  biayaLas        Decimal       @default(0) @map("biaya_las") @db.Decimal(18, 2)
+  biayaKebersihan Decimal       @default(0) @map("biaya_kebersihan") @db.Decimal(18, 2)
+  totalHpp        Decimal       @default(0) @map("total_hpp") @db.Decimal(18, 2)
+  hargaJual       Decimal?      @map("harga_jual") @db.Decimal(18, 2)
+  labaRugi        Decimal?      @map("laba_rugi") @db.Decimal(18, 2)
+  catatan         String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  unit            EquipmentUnit @relation(fields: [unitId], references: [id])
+
+  @@map("unit_sale_hpps")
+}
+
+model Attachment {
+  id          Int      @id @default(autoincrement())
+  entityType  String   @map("entity_type")
+  entityId    Int      @map("entity_id")
+  fileName    String   @map("file_name")
+  fileUrl     String   @map("file_url")
+  fileType    String?  @map("file_type")
+  uploadedBy  Int?     @map("uploaded_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("attachments")
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int?     @map("user_id")
+  action     String
+  entityType String   @map("entity_type")
+  entityId   Int?     @map("entity_id")
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}

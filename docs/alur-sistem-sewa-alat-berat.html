@@ -1,0 +1,1563 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dokumentasi Alur Sistem Sewa Alat Berat</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f8fafc;
+      --ink: #132238;
+      --muted: #667085;
+      --line: #dbe4ee;
+      --brand: #0f766e;
+      --brand-soft: #e5f5f2;
+      --blue: #2563eb;
+      --blue-soft: #eaf1ff;
+      --amber: #b7791f;
+      --amber-soft: #fff7e6;
+      --red: #c2410c;
+      --red-soft: #fff1eb;
+      --green: #15803d;
+      --green-soft: #eaf8ef;
+      --purple: #6d28d9;
+      --purple-soft: #f3edff;
+      --shadow: 0 18px 45px rgba(17, 24, 39, 0.08);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      background: #0b1727;
+      color: #dbeafe;
+      padding: 24px 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 22px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 800;
+      font-size: 22px;
+    }
+
+    .brand strong {
+      display: block;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .brand span {
+      display: block;
+      color: #93a4b8;
+      font-size: 12px;
+    }
+
+    .nav-title {
+      margin: 22px 10px 8px;
+      color: #7f92aa;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav a {
+      display: block;
+      padding: 9px 10px;
+      border-radius: 10px;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .nav a:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    main {
+      padding: 34px;
+      max-width: 1380px;
+      width: 100%;
+    }
+
+    .hero {
+      border-radius: 24px;
+      background:
+        linear-gradient(135deg, rgba(15,118,110,.94), rgba(19,34,56,.96)),
+        linear-gradient(45deg, transparent 25%, rgba(255,255,255,.1) 25%, rgba(255,255,255,.1) 26%, transparent 26%);
+      color: #fff;
+      padding: 38px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      max-width: 900px;
+      font-size: clamp(30px, 4vw, 56px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 900px;
+      margin: 0;
+      color: #d9f7f1;
+      font-size: 16px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .hero-stat {
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,.08);
+    }
+
+    .hero-stat b {
+      display: block;
+      font-size: 22px;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 3px;
+      color: #bfeee6;
+      font-size: 12px;
+    }
+
+    section {
+      margin-top: 26px;
+      border-radius: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 30px rgba(17, 24, 39, 0.04);
+      overflow: hidden;
+    }
+
+    .section-head {
+      padding: 24px 26px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #fbfdff);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 900px;
+    }
+
+    .content {
+      padding: 24px 26px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 18px;
+    }
+
+    .card.soft {
+      background: var(--panel-soft);
+    }
+
+    .card p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .tag.blue { background: var(--blue-soft); color: var(--blue); }
+    .tag.amber { background: var(--amber-soft); color: var(--amber); }
+    .tag.red { background: var(--red-soft); color: var(--red); }
+    .tag.green { background: var(--green-soft); color: var(--green); }
+    .tag.purple { background: var(--purple-soft); color: var(--purple); }
+
+    .flow {
+      display: grid;
+      gap: 14px;
+    }
+
+    .flow-row {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 118px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 15px;
+      background: #fff;
+    }
+
+    .flow-step:not(:last-child)::after {
+      content: ">";
+      position: absolute;
+      right: -11px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .num {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .flow-step b {
+      display: block;
+      font-size: 14px;
+    }
+
+    .flow-step span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+
+    .lane-title {
+      background: #102033;
+      color: #fff;
+      padding: 16px;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .lane-body {
+      padding: 16px;
+    }
+
+    .mini-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mini-flow span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: var(--panel-soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .mini-flow i {
+      color: var(--muted);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .menu-tree {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .menu-group {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+    }
+
+    .menu-group h3 {
+      font-size: 16px;
+      color: var(--brand);
+    }
+
+    .menu-group ul,
+    .plain-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .menu-group li,
+    .plain-list li {
+      margin: 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--panel-soft);
+      color: #475467;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+
+    td {
+      color: #344054;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: var(--panel-soft);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin: 2px 2px 2px 0;
+    }
+
+    .doc-link {
+      font-family: Consolas, Monaco, monospace;
+      font-size: 12px;
+      color: var(--brand);
+    }
+
+    .note {
+      border-left: 5px solid var(--brand);
+      background: var(--brand-soft);
+      border-radius: 12px;
+      padding: 16px;
+      color: #1d4b45;
+      font-size: 14px;
+    }
+
+    .print-note {
+      display: none;
+    }
+
+    @media (max-width: 1100px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      main {
+        padding: 18px;
+      }
+
+      .hero-grid,
+      .grid.four,
+      .grid.three,
+      .menu-tree,
+      .flow-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .flow-step:not(:last-child)::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding: 26px;
+      }
+
+      .hero-grid,
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .menu-tree,
+      .flow-row {
+        grid-template-columns: 1fr;
+      }
+
+      .lane {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head,
+      .content {
+        padding: 20px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        padding: 0;
+        max-width: none;
+      }
+
+      .hero,
+      section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      .hero {
+        border-radius: 0;
+      }
+
+      .print-note {
+        display: block;
+        margin: 10px 0 20px;
+        color: #555;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <strong>Sewa Alat Berat</strong>
+          <span>Dokumentasi Alur Sistem</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <div class="nav-title">Ringkasan</div>
+        <a href="#overview">Overview Sistem</a>
+        <a href="#diagram-utama">Diagram Alur Utama</a>
+        <a href="#menu">Struktur Menu</a>
+        <a href="#role">Role dan Permission</a>
+
+        <div class="nav-title">Alur Modul</div>
+        <a href="#master">Master Data</a>
+        <a href="#sewa">Transaksi Sewa</a>
+        <a href="#operasional">Operasional</a>
+        <a href="#keuangan">Keuangan</a>
+        <a href="#maintenance">Maintenance</a>
+        <a href="#penjualan">Penjualan Unit</a>
+        <a href="#laporan">Laporan</a>
+        <a href="#dokumen">Dokumen Cetak</a>
+
+        <div class="nav-title">Teknis</div>
+        <a href="#relasi">Relasi Data</a>
+        <a href="#status">Status Data</a>
+        <a href="#skenario">Skenario End-to-End</a>
+        <a href="#catatan">Catatan Implementasi</a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="hero" id="overview">
+        <div class="eyebrow">Dokumentasi Internal - 13 Mei 2026</div>
+        <h1>Alur Sistem Penyewaan Alat Berat</h1>
+        <p>
+          Dokumen ini menjelaskan alur kerja sistem dari master data, permintaan sewa,
+          penawaran, kontrak, mobilisasi, operasional, invoice, pembayaran, kwitansi,
+          maintenance, penjualan unit, sampai laporan dan dokumen cetak.
+        </p>
+        <div class="hero-grid">
+          <div class="hero-stat"><b>7</b><span>Kelompok menu utama</span></div>
+          <div class="hero-stat"><b>4</b><span>Role default</span></div>
+          <div class="hero-stat"><b>9</b><span>Dokumen print aktif</span></div>
+          <div class="hero-stat"><b>Full</b><span>Auth + permission per fitur</span></div>
+        </div>
+      </div>
+
+      <p class="print-note">Dicetak dari file HTML dokumentasi alur sistem sewa alat berat.</p>
+
+      <section id="diagram-utama">
+        <div class="section-head">
+          <h2>Diagram Alur Utama Sewa</h2>
+          <p>Flow utama sistem dimulai dari data dasar, transaksi sewa, eksekusi operasional, lalu keuangan dan laporan.</p>
+        </div>
+        <div class="content">
+          <div class="flow">
+            <div class="flow-row">
+              <div class="flow-step">
+                <div class="num">1</div>
+                <b>Master Data</b>
+                <span>Unit, customer, operator, driver, lokasi, tarif, supplier, sparepart.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">2</div>
+                <b>Permintaan Sewa</b>
+                <span>Input kebutuhan customer, lokasi, jenis alat, tanggal, estimasi jam.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">3</div>
+                <b>Penawaran</b>
+                <span>Harga dan unit ditawarkan ke customer. Bisa dicetak.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">4</div>
+                <b>Kontrak</b>
+                <span>Kontrak final berisi unit, operator, lokasi, periode, nilai, DP.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">5</div>
+                <b>Mobilisasi</b>
+                <span>Unit dikirim ke lokasi kerja, driver dan biaya dicatat.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">6</div>
+                <b>Operasional</b>
+                <span>Timesheet, laporan harian, BBM, status unit, jadwal unit.</span>
+              </div>
+            </div>
+            <div class="flow-row">
+              <div class="flow-step">
+                <div class="num">7</div>
+                <b>Invoice</b>
+                <span>Tagihan dibuat dari kontrak dan transaksi terkait.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">8</div>
+                <b>Pembayaran</b>
+                <span>Penerimaan dicatat dan status invoice diperbarui.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">9</div>
+                <b>Kwitansi</b>
+                <span>Bukti penerimaan pembayaran dicetak untuk customer.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">10</div>
+                <b>Piutang</b>
+                <span>Outstanding invoice dipantau berdasarkan jatuh tempo dan pembayaran.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">11</div>
+                <b>Laporan</b>
+                <span>Pendapatan, unit, kontrak, piutang, maintenance, HPP.</span>
+              </div>
+              <div class="flow-step">
+                <div class="num">12</div>
+                <b>Audit</b>
+                <span>Aktivitas penting disimpan untuk kontrol internal.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top:18px;">
+            Prinsip flow: data master harus siap dulu, kontrak menjadi pusat transaksi,
+            operasional mengisi bukti aktivitas, lalu keuangan membuat tagihan dan penerimaan.
+          </div>
+        </div>
+      </section>
+
+      <section id="menu">
+        <div class="section-head">
+          <h2>Struktur Menu Sistem</h2>
+          <p>Menu di sidebar akan mengikuti role dan permission user yang sedang login.</p>
+        </div>
+        <div class="content">
+          <div class="menu-tree">
+            <div class="menu-group">
+              <h3>Dashboard</h3>
+              <ul>
+                <li>Ringkasan statistik bisnis</li>
+                <li>Status unit aktif</li>
+                <li>Kontrak terbaru</li>
+                <li>Grafik pendapatan</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Transaksi Sewa</h3>
+              <ul>
+                <li>Permintaan Sewa</li>
+                <li>Penawaran Sewa</li>
+                <li>Kontrak Sewa</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Operasional</h3>
+              <ul>
+                <li>Mobilisasi / Demobilisasi</li>
+                <li>Jadwal Unit</li>
+                <li>Timesheet / Laporan Harian</li>
+                <li>Konsumsi BBM</li>
+                <li>Status Unit</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Keuangan</h3>
+              <ul>
+                <li>Invoice</li>
+                <li>Pembayaran</li>
+                <li>Kwitansi</li>
+                <li>Piutang</li>
+                <li>Kas & Bank</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Maintenance</h3>
+              <ul>
+                <li>Work Order Maintenance</li>
+                <li>Jadwal Service</li>
+                <li>Riwayat Maintenance</li>
+                <li>Biaya Maintenance</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Penjualan Unit</h3>
+              <ul>
+                <li>Penjualan Unit</li>
+                <li>HPP Unit</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Master Data</h3>
+              <ul>
+                <li>Unit Alat Berat</li>
+                <li>Kategori Alat</li>
+                <li>Tarif Sewa</li>
+                <li>Customer</li>
+                <li>Lokasi Proyek</li>
+                <li>Operator</li>
+                <li>Driver</li>
+                <li>Supplier</li>
+                <li>Sparepart</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Laporan</h3>
+              <ul>
+                <li>Laporan Pendapatan</li>
+                <li>Laporan Utilisasi Unit</li>
+                <li>Laporan Kontrak</li>
+                <li>Laporan Piutang</li>
+                <li>Laporan Maintenance</li>
+                <li>Laporan HPP Unit</li>
+              </ul>
+            </div>
+            <div class="menu-group">
+              <h3>Pengaturan</h3>
+              <ul>
+                <li>Pengguna</li>
+                <li>Role & Permission</li>
+                <li>Template Dokumen</li>
+                <li>Audit Log</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="role">
+        <div class="section-head">
+          <h2>Role dan Permission</h2>
+          <p>Sistem memakai permission per resource dan action: view, create, edit, delete, approval, print, export.</p>
+        </div>
+        <div class="content">
+          <div class="grid four">
+            <div class="card">
+              <span class="tag red">SUPER_ADMIN</span>
+              <h3>Owner</h3>
+              <p>Akses penuh ke seluruh fitur sistem, termasuk role, permission, audit, master, transaksi, print, dan laporan.</p>
+            </div>
+            <div class="card">
+              <span class="tag amber">ADMIN</span>
+              <h3>Admin</h3>
+              <p>Mengelola operasional harian, master data, transaksi sewa, maintenance, penjualan unit, dan laporan.</p>
+            </div>
+            <div class="card">
+              <span class="tag green">FINANCE</span>
+              <h3>Finance</h3>
+              <p>Fokus pada invoice, pembayaran, kwitansi, piutang, kas bank, customer, dan laporan keuangan.</p>
+            </div>
+            <div class="card">
+              <span class="tag blue">OPERASIONAL</span>
+              <h3>Operasional</h3>
+              <p>Fokus pada unit, kontrak view, mobilisasi, timesheet, BBM, status unit, dan maintenance.</p>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top:18px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Fungsi</th>
+                  <th>Contoh pemakaian</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="status">view</span></td>
+                  <td>Melihat halaman dan data.</td>
+                  <td>Melihat daftar invoice atau laporan piutang.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">create</span></td>
+                  <td>Membuat data baru.</td>
+                  <td>Membuat customer, kontrak, invoice, pembayaran.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">edit</span></td>
+                  <td>Mengubah data.</td>
+                  <td>Mengubah status unit, nilai kontrak, work order.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">delete</span></td>
+                  <td>Menghapus data jika belum dipakai transaksi lain.</td>
+                  <td>Menghapus master supplier yang belum dipakai.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">approval</span></td>
+                  <td>Hak untuk proses persetujuan atau validasi status.</td>
+                  <td>Approval permintaan, penawaran, kontrak, work order.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">print</span></td>
+                  <td>Membuka dokumen cetak.</td>
+                  <td>Cetak penawaran, kontrak, invoice, kwitansi, WO.</td>
+                </tr>
+                <tr>
+                  <td><span class="status">export</span></td>
+                  <td>Ekspor data atau laporan.</td>
+                  <td>Ekspor laporan pendapatan atau utilisasi unit.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="master">
+        <div class="section-head">
+          <h2>Alur Master Data</h2>
+          <p>Master data adalah fondasi transaksi. Jika master belum lengkap, transaksi sewa dan keuangan akan kurang akurat.</p>
+        </div>
+        <div class="content">
+          <div class="grid three">
+            <div class="card soft">
+              <span class="tag">Unit dan Tarif</span>
+              <h3>Data alat berat</h3>
+              <p>Isi kategori, kode lambung, merk, model, tahun, status, lokasi, tarif harian, tarif bulanan, dan HM saat ini.</p>
+            </div>
+            <div class="card soft">
+              <span class="tag blue">Pihak terkait</span>
+              <h3>Customer, supplier, operator, driver</h3>
+              <p>Data ini dipakai untuk permintaan, kontrak, mobilisasi, work order, dan sparepart.</p>
+            </div>
+            <div class="card soft">
+              <span class="tag purple">Lokasi dan sparepart</span>
+              <h3>Lokasi proyek dan inventory</h3>
+              <p>Lokasi dipakai di kontrak dan unit, sparepart dipakai di maintenance dan perhitungan biaya.</p>
+            </div>
+          </div>
+
+          <div class="lane" style="margin-top:18px;">
+            <div class="lane-title">Urutan input disarankan</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Kategori Alat</span><i>-></i>
+                <span>Lokasi Proyek</span><i>-></i>
+                <span>Unit Alat Berat</span><i>-></i>
+                <span>Tarif Sewa</span><i>-></i>
+                <span>Customer</span><i>-></i>
+                <span>Operator / Driver</span><i>-></i>
+                <span>Supplier / Sparepart</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="note">
+            Penghapusan master dibatasi jika data sudah dipakai transaksi. Contoh: customer yang sudah punya kontrak
+            atau invoice tidak bisa langsung dihapus agar histori tetap aman.
+          </div>
+        </div>
+      </section>
+
+      <section id="sewa">
+        <div class="section-head">
+          <h2>Alur Transaksi Sewa</h2>
+          <p>Modul ini menangani proses komersial dari kebutuhan customer sampai kontrak aktif.</p>
+        </div>
+        <div class="content">
+          <div class="lane">
+            <div class="lane-title">1. Permintaan Sewa</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Customer mengajukan kebutuhan</span><i>-></i>
+                <span>Admin input permintaan</span><i>-></i>
+                <span>Status Pending / Diproses</span><i>-></i>
+                <span>Data jadi referensi penawaran</span>
+              </div>
+              <ul class="plain-list">
+                <li>Data utama: nomor permintaan, customer, tanggal, lokasi, jenis alat, mulai sewa, akhir sewa, estimasi jam, status, catatan.</li>
+                <li>Tujuan: mencatat kebutuhan awal tanpa langsung mengikat kontrak.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lane">
+            <div class="lane-title">2. Penawaran Sewa</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Pilih customer</span><i>-></i>
+                <span>Pilih unit</span><i>-></i>
+                <span>Isi tarif dan estimasi total</span><i>-></i>
+                <span>Cetak penawaran</span><i>-></i>
+                <span>Disetujui / Ditolak</span>
+              </div>
+              <ul class="plain-list">
+                <li>Status umum: Draft, Terkirim, Disetujui, Ditolak, Expired.</li>
+                <li>Output: dokumen penawaran yang bisa dicetak dari tombol Cetak.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="lane">
+            <div class="lane-title">3. Kontrak Sewa</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Penawaran disetujui</span><i>-></i>
+                <span>Buat kontrak</span><i>-></i>
+                <span>Tentukan unit, operator, lokasi</span><i>-></i>
+                <span>Isi periode dan nilai</span><i>-></i>
+                <span>Cetak kontrak</span>
+              </div>
+              <ul class="plain-list">
+                <li>Data utama: no kontrak, customer, unit, operator, lokasi, tanggal kontrak, mulai sewa, akhir sewa, tarif, satuan, nilai kontrak, DP, status.</li>
+                <li>Status umum: Aktif, Selesai, Dibatalkan, Diperpanjang.</li>
+                <li>Kontrak menjadi referensi untuk mobilisasi, timesheet, BBM, invoice, dan laporan kontrak.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="operasional">
+        <div class="section-head">
+          <h2>Alur Operasional</h2>
+          <p>Operasional mencatat pergerakan unit, pemakaian harian, bahan bakar, dan status unit.</p>
+        </div>
+        <div class="content">
+          <div class="flow-row">
+            <div class="flow-step">
+              <div class="num">A</div>
+              <b>Mobilisasi</b>
+              <span>Unit dikirim dari asal ke tujuan. Driver, kontrak, biaya, tanggal berangkat dan tiba dicatat.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">B</div>
+              <b>Jadwal Unit</b>
+              <span>Kontrak aktif menjadi kalender sederhana pemakaian unit.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">C</div>
+              <b>Timesheet</b>
+              <span>Jam kerja, HM awal, HM akhir, fuel, aktivitas, operator, dan kontrak dicatat harian.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">D</div>
+              <b>Konsumsi BBM</b>
+              <span>Liter, harga per liter, total, supplier, unit, dan kontrak dicatat untuk kontrol biaya.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">E</div>
+              <b>Status Unit</b>
+              <span>Status unit dipantau: Stand By, On Duty, Maintenance, Break Down, atau status lain.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">F</div>
+              <b>Laporan</b>
+              <span>Data operasional masuk ke utilisasi unit, maintenance, dan pendapatan.</span>
+            </div>
+          </div>
+
+          <div class="grid two" style="margin-top:18px;">
+            <div class="card">
+              <span class="tag blue">Mobilisasi / Demobilisasi</span>
+              <h3>Output dokumen</h3>
+              <p>Surat mobilisasi dapat dicetak dari data mobilisasi. Dokumen berisi unit, driver, rute, jadwal, kontrak, dan biaya.</p>
+            </div>
+            <div class="card">
+              <span class="tag green">Timesheet</span>
+              <h3>Basis penagihan</h3>
+              <p>Timesheet dan laporan harian menjadi bukti aktivitas lapangan yang bisa dipakai sebagai dasar invoice operasional.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="keuangan">
+        <div class="section-head">
+          <h2>Alur Keuangan</h2>
+          <p>Keuangan mengelola tagihan, pembayaran, bukti penerimaan, piutang, dan rekening kas bank.</p>
+        </div>
+        <div class="content">
+          <div class="flow-row">
+            <div class="flow-step">
+              <div class="num">1</div>
+              <b>Invoice</b>
+              <span>Dibuat untuk customer berdasarkan kontrak atau kebutuhan tagihan.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">2</div>
+              <b>Item Invoice</b>
+              <span>Rincian tagihan, volume, satuan, harga satuan, subtotal, pajak, total.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">3</div>
+              <b>Pembayaran</b>
+              <span>Penerimaan dicatat dengan metode dan rekening bank.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">4</div>
+              <b>Status Invoice</b>
+              <span>Belum Lunas, Sebagian, Lunas, atau Jatuh Tempo.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">5</div>
+              <b>Kwitansi</b>
+              <span>Bukti penerimaan pembayaran untuk customer.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">6</div>
+              <b>Piutang</b>
+              <span>Outstanding dihitung dari total invoice dikurangi pembayaran.</span>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top:18px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Menu</th>
+                  <th>Fungsi</th>
+                  <th>Input penting</th>
+                  <th>Output</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Invoice</td>
+                  <td>Membuat tagihan ke customer.</td>
+                  <td>Customer, kontrak, tanggal, jatuh tempo, subtotal, pajak, total, rekening.</td>
+                  <td>Dokumen invoice print, data piutang.</td>
+                </tr>
+                <tr>
+                  <td>Pembayaran</td>
+                  <td>Mencatat penerimaan pembayaran invoice.</td>
+                  <td>Invoice, tanggal, jumlah, metode, rekening, catatan.</td>
+                  <td>Status invoice diperbarui, bukti pembayaran print.</td>
+                </tr>
+                <tr>
+                  <td>Kwitansi</td>
+                  <td>Mencetak bukti penerimaan customer.</td>
+                  <td>Invoice, diterima dari, untuk pembayaran, jumlah, terbilang, penandatangan.</td>
+                  <td>Dokumen kwitansi print.</td>
+                </tr>
+                <tr>
+                  <td>Piutang</td>
+                  <td>Monitoring invoice belum lunas.</td>
+                  <td>Data invoice dan pembayaran.</td>
+                  <td>Daftar outstanding dan umur jatuh tempo.</td>
+                </tr>
+                <tr>
+                  <td>Kas & Bank</td>
+                  <td>Master rekening penerimaan dan pembayaran.</td>
+                  <td>Nama bank, cabang, nomor rekening, atas nama, default.</td>
+                  <td>Referensi invoice, pembayaran, kwitansi.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="maintenance">
+        <div class="section-head">
+          <h2>Alur Maintenance</h2>
+          <p>Maintenance mengontrol jadwal service, work order, detail part, riwayat, dan biaya per unit.</p>
+        </div>
+        <div class="content">
+          <div class="lane">
+            <div class="lane-title">Jadwal Service</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Ambil HM unit</span><i>-></i>
+                <span>Cek service terakhir</span><i>-></i>
+                <span>Hitung HM berikutnya</span><i>-></i>
+                <span>Status Normal / Segera / Jatuh Tempo</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lane">
+            <div class="lane-title">Work Order</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Buat WO</span><i>-></i>
+                <span>Pilih unit</span><i>-></i>
+                <span>Isi tipe, tanggal, HM, deskripsi</span><i>-></i>
+                <span>Tambah part / jasa</span><i>-></i>
+                <span>Status Done</span><i>-></i>
+                <span>Riwayat dan biaya</span>
+              </div>
+              <ul class="plain-list">
+                <li>Tipe umum: Rutin, Preventive, Corrective, Breakdown.</li>
+                <li>Status umum: Open, In Progress, Done, Cancel.</li>
+                <li>Detail part berisi sparepart atau jasa, supplier, harga, qty, satuan, total, dan foto URL bila ada.</li>
+                <li>Dokumen WO dapat dicetak untuk instruksi kerja maintenance.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="penjualan">
+        <div class="section-head">
+          <h2>Alur Penjualan Unit dan HPP</h2>
+          <p>Modul ini dipakai saat unit akan dihitung harga pokoknya atau dicatat untuk penjualan.</p>
+        </div>
+        <div class="content">
+          <div class="flow-row">
+            <div class="flow-step">
+              <div class="num">1</div>
+              <b>Pilih Unit</b>
+              <span>Unit yang akan dijual atau dihitung HPP-nya.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">2</div>
+              <b>Isi HPP Pembelian</b>
+              <span>Nilai dasar pembelian atau nilai modal unit.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">3</div>
+              <b>Tambah Biaya</b>
+              <span>Perbaikan, mekanik, cat, las, kebersihan.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">4</div>
+              <b>Total HPP</b>
+              <span>Total biaya dihitung sebagai harga pokok unit.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">5</div>
+              <b>Harga Jual</b>
+              <span>Jika unit dijual, isi harga jual.</span>
+            </div>
+            <div class="flow-step">
+              <div class="num">6</div>
+              <b>Laba / Rugi</b>
+              <span>Harga jual dikurangi total HPP.</span>
+            </div>
+          </div>
+
+          <div class="grid two" style="margin-top:18px;">
+            <div class="card">
+              <span class="tag purple">HPP Unit</span>
+              <h3>Fokus biaya pokok</h3>
+              <p>Dipakai untuk mengetahui modal final unit setelah semua biaya persiapan dijumlahkan.</p>
+            </div>
+            <div class="card">
+              <span class="tag green">Penjualan Unit</span>
+              <h3>Fokus transaksi jual</h3>
+              <p>Dipakai untuk mencatat harga jual dan melihat laba rugi dari unit yang dijual.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="laporan">
+        <div class="section-head">
+          <h2>Alur Laporan</h2>
+          <p>Laporan mengumpulkan data dari transaksi agar manajemen bisa memantau performa bisnis.</p>
+        </div>
+        <div class="content">
+          <div class="grid three">
+            <div class="card">
+              <span class="tag">Pendapatan</span>
+              <h3>Laporan Pendapatan</h3>
+              <p>Rekap invoice per bulan, jumlah kontrak, total tagihan, sudah terbayar, belum terbayar, dan persentase bayar.</p>
+            </div>
+            <div class="card">
+              <span class="tag blue">Unit</span>
+              <h3>Laporan Utilisasi Unit</h3>
+              <p>Status unit, lokasi, kontrak aktif, kontrak selesai, pendapatan, dan WO aktif.</p>
+            </div>
+            <div class="card">
+              <span class="tag green">Kontrak</span>
+              <h3>Laporan Kontrak</h3>
+              <p>Rekap kontrak per customer, total kontrak, aktif, selesai, total nilai kontrak, dan DP.</p>
+            </div>
+            <div class="card">
+              <span class="tag amber">Piutang</span>
+              <h3>Laporan Piutang</h3>
+              <p>Invoice outstanding, nilai terbayar, sisa piutang, status, dan umur jatuh tempo.</p>
+            </div>
+            <div class="card">
+              <span class="tag red">Maintenance</span>
+              <h3>Laporan Maintenance</h3>
+              <p>Total WO, WO aktif, WO selesai, dan biaya maintenance per unit.</p>
+            </div>
+            <div class="card">
+              <span class="tag purple">HPP</span>
+              <h3>Laporan HPP Unit</h3>
+              <p>HPP, harga jual, dan laba rugi unit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="dokumen">
+        <div class="section-head">
+          <h2>Dokumen Cetak Aktif</h2>
+          <p>Dokumen print dibuka dari tombol Cetak pada data transaksi dan dilindungi permission print.</p>
+        </div>
+        <div class="content">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Dokumen</th>
+                  <th>Module</th>
+                  <th>Route print</th>
+                  <th>Isi utama</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Penawaran Sewa</td>
+                  <td>Transaksi Sewa</td>
+                  <td class="doc-link">/sewa/penawaran/[id]/print</td>
+                  <td>Customer, unit, tarif, satuan, estimasi total, catatan, masa berlaku.</td>
+                </tr>
+                <tr>
+                  <td>Kontrak Sewa</td>
+                  <td>Transaksi Sewa</td>
+                  <td class="doc-link">/sewa/kontrak/[id]/print</td>
+                  <td>Customer, unit, operator, lokasi, periode, tarif, nilai kontrak, DP, tanda tangan.</td>
+                </tr>
+                <tr>
+                  <td>Mobilisasi</td>
+                  <td>Operasional</td>
+                  <td class="doc-link">/mobilisasi/[id]/print</td>
+                  <td>Unit, driver, kontrak, asal, tujuan, jadwal, biaya mobilisasi, biaya demobilisasi.</td>
+                </tr>
+                <tr>
+                  <td>Invoice</td>
+                  <td>Keuangan</td>
+                  <td class="doc-link">/keuangan/invoice/[id]/print</td>
+                  <td>Customer, kontrak, item invoice, subtotal, pajak, total, rekening pembayaran.</td>
+                </tr>
+                <tr>
+                  <td>Pembayaran</td>
+                  <td>Keuangan</td>
+                  <td class="doc-link">/keuangan/pembayaran/[id]/print</td>
+                  <td>No pembayaran, invoice, customer, jumlah, metode, rekening, catatan.</td>
+                </tr>
+                <tr>
+                  <td>Kwitansi</td>
+                  <td>Keuangan</td>
+                  <td class="doc-link">/keuangan/kwitansi/[id]/print</td>
+                  <td>No kwitansi, diterima dari, untuk pembayaran, jumlah, terbilang, rekening, tanda tangan.</td>
+                </tr>
+                <tr>
+                  <td>Work Order Maintenance</td>
+                  <td>Maintenance</td>
+                  <td class="doc-link">/maintenance/work-order/[id]/print</td>
+                  <td>Unit, mekanik, supplier, jadwal, HM, deskripsi, part, total biaya.</td>
+                </tr>
+                <tr>
+                  <td>Penjualan Unit</td>
+                  <td>Penjualan Unit</td>
+                  <td class="doc-link">/penjualan-unit/penjualan/[id]/print</td>
+                  <td>Unit, komponen HPP, total HPP, harga jual, laba rugi.</td>
+                </tr>
+                <tr>
+                  <td>HPP Unit</td>
+                  <td>Penjualan Unit</td>
+                  <td class="doc-link">/penjualan-unit/hpp/[id]/print</td>
+                  <td>Unit, HPP pembelian, biaya perbaikan, biaya mekanik, cat, las, kebersihan, total HPP.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="relasi">
+        <div class="section-head">
+          <h2>Diagram Relasi Data Utama</h2>
+          <p>Gambaran sederhana hubungan data yang paling sering dipakai dalam flow sistem.</p>
+        </div>
+        <div class="content">
+          <div class="grid three">
+            <div class="card">
+              <span class="tag">Customer</span>
+              <h3>Relasi</h3>
+              <p>Customer -> Permintaan Sewa -> Penawaran -> Kontrak -> Invoice -> Pembayaran -> Kwitansi.</p>
+            </div>
+            <div class="card">
+              <span class="tag blue">Unit</span>
+              <h3>Relasi</h3>
+              <p>Unit -> Kontrak -> Mobilisasi -> Timesheet -> BBM -> Maintenance -> Utilisasi Unit.</p>
+            </div>
+            <div class="card">
+              <span class="tag red">Maintenance</span>
+              <h3>Relasi</h3>
+              <p>Unit -> Work Order -> Detail Part -> Sparepart / Supplier -> Biaya Maintenance -> Riwayat.</p>
+            </div>
+          </div>
+
+          <div class="lane" style="margin-top:18px;">
+            <div class="lane-title">Relasi inti sewa</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Customer</span><i>-></i>
+                <span>Quotation</span><i>-></i>
+                <span>Rental Contract</span><i>-></i>
+                <span>Daily Report</span><i>-></i>
+                <span>Invoice</span><i>-></i>
+                <span>Payment</span><i>-></i>
+                <span>Receipt</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lane">
+            <div class="lane-title">Relasi unit</div>
+            <div class="lane-body">
+              <div class="mini-flow">
+                <span>Equipment Unit</span><i>-></i>
+                <span>Rental Contract</span><i>-></i>
+                <span>Mobilisasi</span><i>-></i>
+                <span>Fuel Log</span><i>-></i>
+                <span>Maintenance Order</span><i>-></i>
+                <span>Unit Sale HPP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="status">
+        <div class="section-head">
+          <h2>Status Data yang Dipakai</h2>
+          <p>Status membantu membedakan progress transaksi dan kondisi unit.</p>
+        </div>
+        <div class="content">
+          <div class="grid three">
+            <div class="card">
+              <h3>Penawaran</h3>
+              <p><span class="status">Draft</span><span class="status">Terkirim</span><span class="status">Disetujui</span><span class="status">Ditolak</span><span class="status">Expired</span></p>
+            </div>
+            <div class="card">
+              <h3>Kontrak</h3>
+              <p><span class="status">Aktif</span><span class="status">Selesai</span><span class="status">Dibatalkan</span><span class="status">Diperpanjang</span></p>
+            </div>
+            <div class="card">
+              <h3>Mobilisasi</h3>
+              <p><span class="status">Direncanakan</span><span class="status">Dalam Perjalanan</span><span class="status">Selesai</span><span class="status">Dibatalkan</span></p>
+            </div>
+            <div class="card">
+              <h3>Invoice</h3>
+              <p><span class="status">Belum Lunas</span><span class="status">Sebagian</span><span class="status">Lunas</span><span class="status">Jatuh Tempo</span></p>
+            </div>
+            <div class="card">
+              <h3>Work Order</h3>
+              <p><span class="status">Open</span><span class="status">In Progress</span><span class="status">Done</span><span class="status">Cancel</span></p>
+            </div>
+            <div class="card">
+              <h3>Unit</h3>
+              <p><span class="status">Stand By</span><span class="status">On Duty</span><span class="status">Maintenance</span><span class="status">Break Down</span></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="skenario">
+        <div class="section-head">
+          <h2>Skenario End-to-End</h2>
+          <p>Contoh urutan pemakaian sistem untuk satu transaksi sewa sampai selesai.</p>
+        </div>
+        <div class="content">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Aktor</th>
+                  <th>Aktivitas</th>
+                  <th>Menu</th>
+                  <th>Output</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Admin</td>
+                  <td>Menyiapkan data customer, unit, operator, driver, lokasi, tarif, rekening.</td>
+                  <td>Master Data, Kas & Bank</td>
+                  <td>Referensi transaksi siap.</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Admin / Sales</td>
+                  <td>Mencatat kebutuhan customer untuk sewa alat.</td>
+                  <td>Permintaan Sewa</td>
+                  <td>Permintaan masuk sistem.</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Admin / Sales</td>
+                  <td>Membuat penawaran harga dan mencetak dokumen penawaran.</td>
+                  <td>Penawaran Sewa</td>
+                  <td>Penawaran dikirim ke customer.</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Admin</td>
+                  <td>Membuat kontrak setelah penawaran disetujui.</td>
+                  <td>Kontrak Sewa</td>
+                  <td>Kontrak aktif dan bisa dicetak.</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Operasional</td>
+                  <td>Mencatat mobilisasi unit ke lokasi proyek.</td>
+                  <td>Mobilisasi / Demobilisasi</td>
+                  <td>Surat mobilisasi dan biaya mobilisasi.</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Operasional</td>
+                  <td>Mencatat laporan harian, jam kerja, HM, BBM, dan aktivitas.</td>
+                  <td>Timesheet, BBM</td>
+                  <td>Bukti operasional harian.</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Finance</td>
+                  <td>Membuat invoice berdasarkan kontrak atau periode tagihan.</td>
+                  <td>Invoice</td>
+                  <td>Invoice print dan piutang.</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Finance</td>
+                  <td>Mencatat pembayaran customer.</td>
+                  <td>Pembayaran</td>
+                  <td>Status invoice berubah sesuai pembayaran.</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Finance</td>
+                  <td>Membuat dan mencetak kwitansi.</td>
+                  <td>Kwitansi</td>
+                  <td>Bukti penerimaan pembayaran.</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Management</td>
+                  <td>Memantau performa bisnis.</td>
+                  <td>Laporan</td>
+                  <td>Pendapatan, piutang, unit, kontrak, maintenance, HPP.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="catatan">
+        <div class="section-head">
+          <h2>Catatan Implementasi</h2>
+          <p>Catatan ini membantu tim memahami batasan dan kebiasaan sistem saat digunakan.</p>
+        </div>
+        <div class="content">
+          <div class="grid two">
+            <div class="card">
+              <span class="tag">UI Responsive</span>
+              <h3>Tabel menjadi card di mobile</h3>
+              <p>Semua tabel admin utama sudah dibuat responsive: desktop tampil tabel, layar kecil tampil card sehingga tidak perlu geser horizontal.</p>
+            </div>
+            <div class="card">
+              <span class="tag blue">Auth</span>
+              <h3>Route dilindungi login</h3>
+              <p>Halaman admin dan print dokumen akan redirect ke signin jika user belum login.</p>
+            </div>
+            <div class="card">
+              <span class="tag amber">Permission</span>
+              <h3>Akses mengikuti role</h3>
+              <p>Sidebar dan halaman dicek berdasarkan permission. User hanya melihat fitur yang sesuai hak aksesnya.</p>
+            </div>
+            <div class="card">
+              <span class="tag green">Data</span>
+              <h3>Transaksi memakai Prisma</h3>
+              <p>Data modul diambil langsung dari Prisma/server actions, bukan raw SQL lama atau API client lama.</p>
+            </div>
+          </div>
+
+          <div class="note" style="margin-top:18px;">
+            Rekomendasi uji akhir: buat data dummy lengkap dari master data sampai kwitansi,
+            lalu cek semua laporan dan dokumen print. Ini memastikan flow bisnis berjalan end-to-end.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

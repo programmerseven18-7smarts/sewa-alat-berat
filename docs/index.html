@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentasi Sistem Sewa Alat Berat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Outfit", "sans-serif"],
+                    },
+                    colors: {
+                        brand: {
+                            50: "#fff7ed",
+                            100: "#ffedd5",
+                            500: "#f97316",
+                            600: "#ea580c",
+                            700: "#c2410c",
+                        },
+                        steel: {
+                            50: "#eef6ff",
+                            100: "#d9ebff",
+                            500: "#2563eb",
+                            600: "#1d4ed8",
+                        },
+                        background: "#f6f8fc",
+                        dark: "#111827",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: theme("colors.background"); color: theme("colors.gray.800"); }
+        .sidebar-link.active {
+            background-color: theme("colors.brand.50");
+            color: theme("colors.brand.600");
+            border-right: 3px solid theme("colors.brand.500");
+            font-weight: 600;
+        }
+        h1, h2, h3, h4 { color: theme("colors.dark"); }
+        .doc-section h2 { font-size: 1.875rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+        .doc-section h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; border-bottom: 2px solid theme("colors.gray.100"); padding-bottom: 0.5rem; margin-bottom: 1rem; color: theme("colors.gray.700"); }
+        .doc-section h4 { font-size: 1rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        .doc-section p { margin-bottom: 1rem; line-height: 1.65; color: theme("colors.gray.600"); }
+        .doc-section ul, .doc-section ol { margin-bottom: 1rem; padding-left: 1.5rem; color: theme("colors.gray.600"); }
+        .doc-section ul { list-style-type: disc; }
+        .doc-section ol { list-style-type: decimal; }
+        .doc-section li { margin-bottom: 0.5rem; line-height: 1.6; }
+        pre { background-color: theme("colors.gray.900"); color: theme("colors.gray.100"); padding: 1.25rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1.5rem; font-family: Consolas, Monaco, monospace; font-size: 0.875rem; line-height: 1.45; }
+        code { background-color: theme("colors.gray.100"); color: theme("colors.brand.600"); padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; }
+        pre code { background-color: transparent; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; background-color: white; border-radius: 0.5rem; overflow: hidden; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08); font-size: 0.875rem; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid theme("colors.gray.200"); vertical-align: top; }
+        th { background-color: theme("colors.gray.50"); font-weight: 600; color: theme("colors.gray.700"); }
+        tr:last-child td { border-bottom: none; }
+        .card { background-color: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04); margin-bottom: 1.5rem; }
+        .pill { display: inline-flex; align-items: center; border-radius: 999px; padding: 0.35rem 0.7rem; background: theme("colors.brand.50"); color: theme("colors.brand.700"); font-size: 0.75rem; font-weight: 700; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="home-view" class="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-100 text-brand-600 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2m-6 6H5a2 2 0 01-2-2V8a2 2 0 012-2h3l2-2h4l2 2h3a2 2 0 012 2v5a2 2 0 01-2 2h-2m-4 0h4m-4 0v4m0-4l-2-2"></path></svg>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-dark tracking-tight mb-4">Sistem Sewa Alat Berat</h1>
+                <p class="text-xl text-gray-500 max-w-2xl mx-auto">Dokumentasi alur bisnis, modul aplikasi, struktur data, role, laporan, dan dokumen cetak untuk operasional rental alat berat.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div onclick="openDoc('sec-01')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">01</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Gambaran Umum</h2>
+                    <p class="text-gray-500 text-sm">Tujuan sistem, komponen utama, arsitektur sederhana, dan prinsip kerja aplikasi.</p>
+                </div>
+
+                <div onclick="openDoc('sec-02')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">02</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Alur Sewa</h2>
+                    <p class="text-gray-500 text-sm">Flow dari permintaan, penawaran, kontrak, mobilisasi, operasional, invoice, sampai pembayaran.</p>
+                </div>
+
+                <div onclick="openDoc('sec-03')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">03</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Struktur Menu</h2>
+                    <p class="text-gray-500 text-sm">Daftar menu dashboard, transaksi, operasional, keuangan, maintenance, laporan, dan pengaturan.</p>
+                </div>
+
+                <div onclick="openDoc('sec-04')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">04</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Master Data</h2>
+                    <p class="text-gray-500 text-sm">Data dasar unit, kategori, tarif, customer, lokasi proyek, operator, driver, supplier, dan sparepart.</p>
+                </div>
+
+                <div onclick="openDoc('sec-05')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">05</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Operasional & Maintenance</h2>
+                    <p class="text-gray-500 text-sm">Mobilisasi, jadwal unit, timesheet, BBM, status unit, work order, service, dan biaya perawatan.</p>
+                </div>
+
+                <div onclick="openDoc('sec-06')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-brand-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-brand-100 transition-colors">06</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-brand-600 transition-colors">Keuangan</h2>
+                    <p class="text-gray-500 text-sm">Invoice, item tagihan, pembayaran, kwitansi, rekening bank, status invoice, dan piutang.</p>
+                </div>
+
+                <div onclick="openDoc('sec-07')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-steel-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-steel-100 transition-colors">07</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-steel-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-steel-600 transition-colors">Database & Role</h2>
+                    <p class="text-gray-500 text-sm">Relasi data utama, tabel Prisma, role default, permission, audit log, dan keamanan akses.</p>
+                </div>
+
+                <div onclick="openDoc('sec-08')" class="card cursor-pointer hover:-translate-y-1 hover:shadow-lg transition-all border-t-4 border-steel-500 group">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-4xl font-black text-gray-200 group-hover:text-steel-100 transition-colors">08</span>
+                        <svg class="w-6 h-6 text-gray-400 group-hover:text-steel-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark mb-2 group-hover:text-steel-600 transition-colors">Laporan & Dokumen</h2>
+                    <p class="text-gray-500 text-sm">Laporan pendapatan, utilisasi unit, kontrak, piutang, maintenance, HPP, dan route print dokumen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="doc-view" class="hidden h-screen flex overflow-hidden">
+        <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 h-full overflow-y-auto hidden md:block">
+            <div class="p-6 sticky top-0 bg-white z-10 border-b border-gray-100 cursor-pointer" onclick="goHome()">
+                <h1 class="text-xl font-bold text-brand-600 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Kembali
+                </h1>
+            </div>
+            <nav class="p-4 space-y-1" id="sidebar-nav">
+                <button onclick="openDoc('sec-01')" data-target="sec-01" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">01. Gambaran Umum</button>
+                <button onclick="openDoc('sec-02')" data-target="sec-02" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">02. Alur Sewa</button>
+                <button onclick="openDoc('sec-03')" data-target="sec-03" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">03. Struktur Menu</button>
+                <button onclick="openDoc('sec-04')" data-target="sec-04" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">04. Master Data</button>
+                <button onclick="openDoc('sec-05')" data-target="sec-05" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">05. Operasional</button>
+                <button onclick="openDoc('sec-06')" data-target="sec-06" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">06. Keuangan</button>
+                <button onclick="openDoc('sec-07')" data-target="sec-07" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">07. Database & Role</button>
+                <button onclick="openDoc('sec-08')" data-target="sec-08" class="sidebar-link w-full text-left block px-4 py-3 text-sm rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">08. Laporan</button>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto bg-white p-6 md:p-12 relative">
+            <button onclick="goHome()" class="md:hidden flex items-center gap-2 text-brand-600 font-medium mb-6">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Kembali ke Beranda
+            </button>
+
+            <div class="max-w-4xl mx-auto pb-20 fade-in" id="content-container">
+                <div id="sec-01" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 1</span>
+                    <h2>Gambaran Umum Sistem</h2>
+
+                    <h3>1.1 Tentang Proyek</h3>
+                    <p><strong>Sistem Sewa Alat Berat</strong> adalah aplikasi admin untuk mengelola bisnis rental heavy equipment dari data unit sampai laporan manajemen. Sistem ini memusatkan data customer, unit, kontrak, operasional harian, maintenance, keuangan, dan dokumen cetak agar proses kerja kantor lebih tertib.</p>
+                    <p>Fokus utama sistem adalah memastikan setiap transaksi sewa dapat ditelusuri dari awal sampai akhir: permintaan customer, penawaran harga, kontrak aktif, pergerakan unit, pemakaian harian, tagihan, pembayaran, kwitansi, dan laporan performa.</p>
+
+                    <h3>1.2 Komponen Utama</h3>
+                    <table>
+                        <thead><tr><th>Komponen</th><th>Teknologi</th><th>Fungsi</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Dashboard Web</strong></td><td>Next.js, TypeScript, Tailwind CSS</td><td>Antarmuka admin untuk semua modul bisnis.</td></tr>
+                            <tr><td><strong>Database</strong></td><td>PostgreSQL via Prisma</td><td>Menyimpan master data, transaksi, role, permission, dan audit log.</td></tr>
+                            <tr><td><strong>Server Actions</strong></td><td>Next.js Server Actions</td><td>CRUD modul tanpa API route lama.</td></tr>
+                            <tr><td><strong>Print Pages</strong></td><td>Route full width</td><td>Mencetak penawaran, kontrak, mobilisasi, invoice, pembayaran, kwitansi, WO, penjualan, dan HPP.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>1.3 Arsitektur Sederhana</h3>
+<pre><code>USER ADMIN
+  |
+  | login + permission
+  v
+NEXT.JS DASHBOARD
+  |
+  | server actions
+  v
+PRISMA ORM
+  |
+  v
+POSTGRESQL DATABASE
+  |
+  +-- Master Data
+  +-- Transaksi Sewa
+  +-- Operasional
+  +-- Maintenance
+  +-- Keuangan
+  +-- Laporan
+  +-- Audit Log</code></pre>
+
+                    <h3>1.4 Prinsip Kerja</h3>
+                    <ul>
+                        <li><strong>Kontrak menjadi pusat transaksi.</strong> Mobilisasi, timesheet, BBM, invoice, dan laporan banyak mengambil referensi dari kontrak.</li>
+                        <li><strong>Unit menjadi pusat operasional.</strong> Status unit, lokasi, jam kerja, HM, fuel, maintenance, dan HPP semuanya terkait ke unit.</li>
+                        <li><strong>Keuangan mengikuti bukti transaksi.</strong> Invoice dibuat dari kontrak atau kebutuhan tagihan, pembayaran mengurangi piutang, kwitansi menjadi bukti penerimaan.</li>
+                        <li><strong>Akses mengikuti role.</strong> Sidebar, halaman, aksi CRUD, print, dan export dikontrol oleh permission.</li>
+                    </ul>
+                </div>
+
+                <div id="sec-02" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 2</span>
+                    <h2>Alur Sistem Sewa</h2>
+
+                    <h3>2.1 Flow Utama</h3>
+<pre><code>Master Data
+  -> Permintaan Sewa
+  -> Penawaran Sewa
+  -> Kontrak Sewa
+  -> Mobilisasi / Demobilisasi
+  -> Timesheet + Laporan Harian + BBM
+  -> Invoice
+  -> Pembayaran
+  -> Kwitansi
+  -> Laporan Manajemen</code></pre>
+
+                    <h3>2.2 Skenario End-to-End</h3>
+                    <table>
+                        <thead><tr><th>No</th><th>Aktor</th><th>Aktivitas</th><th>Output</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>Admin</td><td>Menyiapkan data customer, unit, lokasi, operator, driver, tarif, dan rekening bank.</td><td>Referensi transaksi siap dipakai.</td></tr>
+                            <tr><td>2</td><td>Sales / Admin</td><td>Mencatat kebutuhan customer pada menu Permintaan Sewa.</td><td>Permintaan masuk dengan status awal.</td></tr>
+                            <tr><td>3</td><td>Sales / Admin</td><td>Membuat Penawaran Sewa berisi unit, tarif, satuan, estimasi total, masa berlaku, dan catatan.</td><td>Dokumen penawaran dapat dicetak.</td></tr>
+                            <tr><td>4</td><td>Admin</td><td>Membuat Kontrak Sewa setelah penawaran disetujui.</td><td>Kontrak aktif dan menjadi dasar operasional.</td></tr>
+                            <tr><td>5</td><td>Operasional</td><td>Mencatat mobilisasi unit dari lokasi asal ke lokasi proyek.</td><td>Surat mobilisasi dan biaya mobilisasi.</td></tr>
+                            <tr><td>6</td><td>Operator / Admin</td><td>Mengisi laporan harian, jam kerja, HM awal, HM akhir, aktivitas, kendala, dan BBM.</td><td>Data pemakaian unit per hari.</td></tr>
+                            <tr><td>7</td><td>Finance</td><td>Membuat invoice berdasarkan kontrak atau periode tagihan.</td><td>Piutang customer tercatat.</td></tr>
+                            <tr><td>8</td><td>Finance</td><td>Mencatat pembayaran dan mencetak kwitansi.</td><td>Status invoice diperbarui.</td></tr>
+                            <tr><td>9</td><td>Manajemen</td><td>Melihat laporan pendapatan, unit, kontrak, piutang, maintenance, dan HPP.</td><td>Evaluasi bisnis dan operasional.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>2.3 Status Transaksi</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="card">
+                            <span class="pill">Penawaran</span>
+                            <p class="mt-3">Draft, Terkirim, Disetujui, Ditolak, Expired.</p>
+                        </div>
+                        <div class="card">
+                            <span class="pill">Kontrak</span>
+                            <p class="mt-3">Aktif, Selesai, Dibatalkan, Diperpanjang.</p>
+                        </div>
+                        <div class="card">
+                            <span class="pill">Mobilisasi</span>
+                            <p class="mt-3">Direncanakan, Dalam Perjalanan, Selesai, Dibatalkan.</p>
+                        </div>
+                        <div class="card">
+                            <span class="pill">Invoice</span>
+                            <p class="mt-3">Belum Lunas, Sebagian, Lunas, Jatuh Tempo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-03" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 3</span>
+                    <h2>Struktur Menu Dashboard</h2>
+
+                    <h3>3.1 Menu Utama</h3>
+                    <table>
+                        <thead><tr><th>Kelompok</th><th>Menu</th><th>Fungsi</th></tr></thead>
+                        <tbody>
+                            <tr><td>Dashboard</td><td>Dashboard</td><td>Ringkasan statistik bisnis, status unit aktif, kontrak terbaru, dan grafik pendapatan.</td></tr>
+                            <tr><td>Transaksi Sewa</td><td>Permintaan, Penawaran, Kontrak</td><td>Mengelola proses komersial dari kebutuhan customer sampai kontrak sewa aktif.</td></tr>
+                            <tr><td>Operasional</td><td>Mobilisasi, Jadwal Unit, Timesheet, BBM, Status Unit</td><td>Mengontrol pergerakan dan pemakaian unit selama kontrak berjalan.</td></tr>
+                            <tr><td>Keuangan</td><td>Invoice, Pembayaran, Kwitansi, Piutang, Kas & Bank</td><td>Mengatur tagihan, penerimaan, bukti pembayaran, dan rekening.</td></tr>
+                            <tr><td>Maintenance</td><td>WO, Jadwal Service, Riwayat, Biaya</td><td>Mengelola perbaikan, service, dan biaya perawatan unit.</td></tr>
+                            <tr><td>Penjualan Unit</td><td>Penjualan Unit, HPP Unit</td><td>Mencatat perhitungan modal dan transaksi jual unit.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>3.2 Menu Lainnya</h3>
+                    <table>
+                        <thead><tr><th>Kelompok</th><th>Menu</th><th>Catatan</th></tr></thead>
+                        <tbody>
+                            <tr><td>Master Data</td><td>Unit, Kategori, Tarif, Customer, Lokasi, Operator, Driver, Supplier, Sparepart</td><td>Wajib disiapkan sebelum transaksi berjalan.</td></tr>
+                            <tr><td>Laporan</td><td>Pendapatan, Utilisasi Unit, Kontrak, Piutang, Maintenance, HPP Unit</td><td>Dipakai untuk rekap dan pengambilan keputusan.</td></tr>
+                            <tr><td>Pengaturan</td><td>Pengguna, Role & Permission, Template Dokumen, Audit Log</td><td>Dipakai untuk kontrol akses dan administrasi sistem.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>3.3 Sidebar dan Permission</h3>
+                    <p>Menu sidebar tidak tampil secara permanen untuk semua user. Sistem memfilter menu berdasarkan permission user. User dengan role <code>SUPER_ADMIN</code> melihat semua menu, sedangkan user lain hanya melihat menu yang permission-nya diberikan.</p>
+                </div>
+
+                <div id="sec-04" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 4</span>
+                    <h2>Master Data</h2>
+
+                    <h3>4.1 Daftar Master Data</h3>
+                    <table>
+                        <thead><tr><th>Master</th><th>Data penting</th><th>Dipakai oleh</th></tr></thead>
+                        <tbody>
+                            <tr><td>Unit Alat Berat</td><td>Kode lambung, kategori, merk, model, tahun, nopol, chassis, mesin, status, lokasi, tarif, HM.</td><td>Kontrak, operasional, maintenance, HPP.</td></tr>
+                            <tr><td>Kategori Alat</td><td>Kode, nama, deskripsi.</td><td>Unit dan tarif sewa.</td></tr>
+                            <tr><td>Tarif Sewa</td><td>Kategori, nama tarif, satuan, tarif, minimum, catatan.</td><td>Penawaran dan kontrak.</td></tr>
+                            <tr><td>Customer</td><td>Kode, nama, PIC, telepon, email, alamat, kota, NPWP.</td><td>Permintaan, penawaran, kontrak, invoice.</td></tr>
+                            <tr><td>Lokasi Proyek</td><td>Kode, nama, alamat, kota, provinsi, PIC, telepon.</td><td>Kontrak, unit, mobilisasi.</td></tr>
+                            <tr><td>Operator</td><td>Kode, nama, KTP, telepon, SIM, status, unit default.</td><td>Kontrak dan laporan harian.</td></tr>
+                            <tr><td>Driver</td><td>Kode, nama, KTP, telepon, SIM, status.</td><td>Mobilisasi dan demobilisasi.</td></tr>
+                            <tr><td>Supplier</td><td>Kode, nama, PIC, telepon, email, alamat.</td><td>Sparepart dan maintenance.</td></tr>
+                            <tr><td>Sparepart</td><td>Kode, nama, satuan, harga satuan, stok, supplier.</td><td>Work order maintenance.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>4.2 Aturan Input</h3>
+                    <ul>
+                        <li>Kode master harus unik agar data mudah dicari dan tidak bentrok saat laporan.</li>
+                        <li>Status unit harus dijaga sesuai kondisi lapangan: Stand By, On Duty, Maintenance, atau Break Down.</li>
+                        <li>Tarif sewa perlu diberi satuan yang konsisten, misalnya Hari, Bulan, Jam, atau Ritase.</li>
+                        <li>Customer dan lokasi proyek sebaiknya diisi lengkap karena akan masuk ke dokumen print.</li>
+                    </ul>
+
+                    <h3>4.3 Dampak ke Transaksi</h3>
+                    <p>Master data yang tidak rapi akan langsung terasa pada transaksi. Contohnya, unit tanpa status yang benar membuat jadwal unit sulit dibaca, customer tanpa PIC membuat dokumen kontrak kurang lengkap, dan tarif tanpa satuan membuat penawaran tidak jelas.</p>
+                </div>
+
+                <div id="sec-05" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 5</span>
+                    <h2>Operasional & Maintenance</h2>
+
+                    <h3>5.1 Operasional Unit</h3>
+                    <table>
+                        <thead><tr><th>Menu</th><th>Fungsi</th><th>Output</th></tr></thead>
+                        <tbody>
+                            <tr><td>Mobilisasi / Demobilisasi</td><td>Mencatat pengiriman atau penarikan unit dari dan ke lokasi proyek.</td><td>Surat mobilisasi, biaya, status perjalanan, foto bukti.</td></tr>
+                            <tr><td>Jadwal Unit</td><td>Melihat unit yang sedang terpakai, stand by, maintenance, atau bentrok jadwal.</td><td>Kontrol ketersediaan unit.</td></tr>
+                            <tr><td>Timesheet / Laporan Harian</td><td>Mencatat tanggal kerja, jam kerja, fuel, HM awal, HM akhir, aktivitas, dan kendala.</td><td>Dasar rekap pemakaian dan tagihan.</td></tr>
+                            <tr><td>Konsumsi BBM</td><td>Mencatat liter, harga per liter, total, supplier, dan kontrak terkait.</td><td>Kontrol biaya BBM per unit atau kontrak.</td></tr>
+                            <tr><td>Status Unit</td><td>Memperbarui kondisi operasional unit.</td><td>Status terkini untuk dashboard dan laporan.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>5.2 Alur Mobilisasi</h3>
+<pre><code>Buat data mobilisasi
+  -> pilih unit
+  -> pilih driver
+  -> hubungkan kontrak jika ada
+  -> isi asal dan tujuan lokasi
+  -> isi tanggal berangkat dan tiba
+  -> isi biaya mobilisasi / demobilisasi
+  -> update status perjalanan
+  -> cetak surat mobilisasi</code></pre>
+
+                    <h3>5.3 Maintenance</h3>
+                    <p>Modul maintenance dipakai untuk menjaga unit tetap siap kerja dan mencatat biaya perawatan secara rapi.</p>
+                    <ul>
+                        <li><strong>Jadwal Service:</strong> membaca HM unit dan service terakhir untuk menentukan kebutuhan service berikutnya.</li>
+                        <li><strong>Work Order:</strong> mencatat tipe pekerjaan, tanggal, HM, deskripsi, mekanik, supplier, status, dan total biaya.</li>
+                        <li><strong>Detail Part:</strong> mencatat sparepart atau jasa, qty, harga, satuan, total, dan foto bukti bila ada.</li>
+                        <li><strong>Riwayat Maintenance:</strong> menampilkan histori perawatan per unit.</li>
+                        <li><strong>Biaya Maintenance:</strong> merangkum biaya per unit, periode, dan jenis pekerjaan.</li>
+                    </ul>
+
+                    <h3>5.4 Status Work Order</h3>
+                    <p>Status umum yang dipakai: <code>Open</code>, <code>In Progress</code>, <code>Done</code>, dan <code>Cancel</code>. Status ini membantu membedakan WO yang masih perlu dikerjakan dengan WO yang sudah selesai.</p>
+                </div>
+
+                <div id="sec-06" class="doc-section hidden">
+                    <span class="text-brand-500 font-bold tracking-wider text-sm uppercase">Bagian 6</span>
+                    <h2>Keuangan</h2>
+
+                    <h3>6.1 Alur Keuangan</h3>
+<pre><code>Kontrak / transaksi
+  -> Invoice
+  -> Invoice Item
+  -> Pembayaran
+  -> Status Invoice
+  -> Kwitansi
+  -> Laporan Piutang / Pendapatan</code></pre>
+
+                    <h3>6.2 Modul Keuangan</h3>
+                    <table>
+                        <thead><tr><th>Menu</th><th>Input penting</th><th>Output</th></tr></thead>
+                        <tbody>
+                            <tr><td>Invoice</td><td>No invoice, customer, kontrak, tanggal, jatuh tempo, tipe, subtotal, pajak, total, rekening, catatan.</td><td>Dokumen invoice dan data piutang.</td></tr>
+                            <tr><td>Invoice Item</td><td>Deskripsi, volume, satuan, harga satuan, total.</td><td>Rincian tagihan di invoice.</td></tr>
+                            <tr><td>Pembayaran</td><td>No pembayaran, invoice, tanggal, jumlah, metode, rekening, catatan.</td><td>Status invoice diperbarui.</td></tr>
+                            <tr><td>Kwitansi</td><td>No kwitansi, invoice, diterima dari, untuk pembayaran, jumlah, terbilang, rekening, penandatangan.</td><td>Bukti penerimaan untuk customer.</td></tr>
+                            <tr><td>Kas & Bank</td><td>Nama bank, cabang, nomor rekening, atas nama, default.</td><td>Referensi rekening untuk invoice, pembayaran, dan kwitansi.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>6.3 Aturan Status Invoice</h3>
+                    <ul>
+                        <li><strong>Belum Lunas:</strong> invoice sudah dibuat, belum ada pembayaran penuh.</li>
+                        <li><strong>Sebagian:</strong> pembayaran sudah masuk tetapi totalnya belum menutup nilai invoice.</li>
+                        <li><strong>Lunas:</strong> total pembayaran sudah menutup nilai invoice.</li>
+                        <li><strong>Jatuh Tempo:</strong> invoice belum lunas dan melewati tanggal jatuh tempo.</li>
+                    </ul>
+
+                    <h3>6.4 Piutang</h3>
+                    <p>Piutang dihitung dari invoice yang belum lunas. Laporan piutang membantu finance melihat sisa tagihan, umur jatuh tempo, customer yang perlu ditagih, dan pembayaran yang sudah masuk.</p>
+                </div>
+
+                <div id="sec-07" class="doc-section hidden">
+                    <span class="text-steel-500 font-bold tracking-wider text-sm uppercase">Bagian 7</span>
+                    <h2>Database & Role</h2>
+
+                    <h3>7.1 Relasi Data Utama</h3>
+<pre><code>Customer
+  -> RentalRequest
+  -> Quotation
+  -> RentalContract
+  -> Invoice
+  -> Payment
+  -> Receipt
+
+EquipmentUnit
+  -> RentalContract
+  -> Mobilisasi
+  -> DailyReport
+  -> FuelLog
+  -> MaintenanceOrder
+  -> UnitSaleHpp
+
+MaintenanceOrder
+  -> MaintenancePart
+  -> Sparepart
+  -> Supplier</code></pre>
+
+                    <h3>7.2 Tabel Inti</h3>
+                    <table>
+                        <thead><tr><th>Area</th><th>Tabel / model</th><th>Catatan</th></tr></thead>
+                        <tbody>
+                            <tr><td>Auth</td><td><code>User</code>, <code>Role</code>, <code>Permission</code>, <code>UserRole</code>, <code>RolePermission</code></td><td>Dasar login dan hak akses.</td></tr>
+                            <tr><td>Master</td><td><code>EquipmentUnit</code>, <code>Customer</code>, <code>ProjectLocation</code>, <code>Operator</code>, <code>Driver</code>, <code>Supplier</code>, <code>Sparepart</code></td><td>Data referensi transaksi.</td></tr>
+                            <tr><td>Sewa</td><td><code>RentalRequest</code>, <code>Quotation</code>, <code>RentalContract</code></td><td>Proses komersial sewa.</td></tr>
+                            <tr><td>Operasional</td><td><code>Mobilisasi</code>, <code>DailyReport</code>, <code>FuelLog</code></td><td>Aktivitas unit di lapangan.</td></tr>
+                            <tr><td>Keuangan</td><td><code>Invoice</code>, <code>InvoiceItem</code>, <code>Payment</code>, <code>Receipt</code>, <code>BankAccount</code></td><td>Tagihan, pembayaran, dan bukti penerimaan.</td></tr>
+                            <tr><td>Maintenance</td><td><code>MaintenanceOrder</code>, <code>MaintenancePart</code></td><td>Work order dan biaya perawatan.</td></tr>
+                            <tr><td>Kontrol</td><td><code>Attachment</code>, <code>AuditLog</code></td><td>Lampiran dan riwayat aksi penting.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>7.3 Role Default</h3>
+                    <table>
+                        <thead><tr><th>Role</th><th>Fokus Akses</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>SUPER_ADMIN</strong></td><td>Akses penuh ke seluruh fitur, termasuk role, permission, dan audit log.</td></tr>
+                            <tr><td><strong>ADMIN</strong></td><td>Mengelola master data, transaksi sewa, operasional, dan dokumen.</td></tr>
+                            <tr><td><strong>FINANCE</strong></td><td>Fokus invoice, pembayaran, kwitansi, kas bank, piutang, dan laporan keuangan.</td></tr>
+                            <tr><td><strong>VIEWER</strong></td><td>Akses baca untuk dashboard dan laporan tertentu.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>7.4 Permission</h3>
+                    <p>Permission dibuat per modul dan aksi, misalnya <code>invoice.view</code>, <code>invoice.create</code>, <code>invoice.edit</code>, <code>invoice.delete</code>, <code>invoice.print</code>, atau <code>laporan_pendapatan.export</code>. Pola ini membuat akses bisa dibuat granular sesuai kebutuhan perusahaan.</p>
+                </div>
+
+                <div id="sec-08" class="doc-section hidden">
+                    <span class="text-steel-500 font-bold tracking-wider text-sm uppercase">Bagian 8</span>
+                    <h2>Laporan & Dokumen Cetak</h2>
+
+                    <h3>8.1 Laporan Manajemen</h3>
+                    <table>
+                        <thead><tr><th>Laporan</th><th>Isi utama</th><th>Kegunaan</th></tr></thead>
+                        <tbody>
+                            <tr><td>Pendapatan</td><td>Invoice per bulan, kontrak, total tagihan, pembayaran, outstanding.</td><td>Melihat performa revenue.</td></tr>
+                            <tr><td>Utilisasi Unit</td><td>Status unit, lokasi, kontrak aktif, kontrak selesai, pendapatan, WO aktif.</td><td>Membaca produktivitas unit.</td></tr>
+                            <tr><td>Kontrak</td><td>Customer, jumlah kontrak, status aktif atau selesai, nilai kontrak, DP.</td><td>Monitoring portofolio kontrak.</td></tr>
+                            <tr><td>Piutang</td><td>Invoice outstanding, sisa piutang, jatuh tempo, pembayaran.</td><td>Prioritas penagihan finance.</td></tr>
+                            <tr><td>Maintenance</td><td>Total WO, WO aktif, WO selesai, dan biaya per unit.</td><td>Kontrol biaya perawatan.</td></tr>
+                            <tr><td>HPP Unit</td><td>HPP pembelian, biaya perbaikan, harga jual, laba rugi.</td><td>Evaluasi penjualan unit.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>8.2 Dokumen Print Aktif</h3>
+                    <table>
+                        <thead><tr><th>Dokumen</th><th>Route</th><th>Isi utama</th></tr></thead>
+                        <tbody>
+                            <tr><td>Penawaran Sewa</td><td><code>/sewa/penawaran/[id]/print</code></td><td>Customer, unit, tarif, satuan, estimasi total, masa berlaku, catatan.</td></tr>
+                            <tr><td>Kontrak Sewa</td><td><code>/sewa/kontrak/[id]/print</code></td><td>Customer, unit, operator, lokasi, periode, tarif, nilai kontrak, DP.</td></tr>
+                            <tr><td>Mobilisasi</td><td><code>/mobilisasi/[id]/print</code></td><td>Unit, driver, kontrak, asal, tujuan, jadwal, biaya mobilisasi.</td></tr>
+                            <tr><td>Invoice</td><td><code>/keuangan/invoice/[id]/print</code></td><td>Customer, kontrak, item invoice, subtotal, pajak, total, rekening.</td></tr>
+                            <tr><td>Pembayaran</td><td><code>/keuangan/pembayaran/[id]/print</code></td><td>No pembayaran, invoice, customer, jumlah, metode, rekening, catatan.</td></tr>
+                            <tr><td>Kwitansi</td><td><code>/keuangan/kwitansi/[id]/print</code></td><td>No kwitansi, diterima dari, untuk pembayaran, jumlah, terbilang, tanda tangan.</td></tr>
+                            <tr><td>Work Order Maintenance</td><td><code>/maintenance/work-order/[id]/print</code></td><td>Unit, mekanik, supplier, jadwal, HM, deskripsi, part, total biaya.</td></tr>
+                            <tr><td>Penjualan Unit</td><td><code>/penjualan-unit/penjualan/[id]/print</code></td><td>Unit, HPP, harga jual, laba rugi.</td></tr>
+                            <tr><td>HPP Unit</td><td><code>/penjualan-unit/hpp/[id]/print</code></td><td>HPP pembelian, biaya perbaikan, mekanik, cat, las, kebersihan, total HPP.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>8.3 Rekomendasi Uji Dokumen</h3>
+                    <ol>
+                        <li>Buat satu customer, satu unit, satu operator, satu driver, satu lokasi, dan satu rekening bank.</li>
+                        <li>Buat permintaan, penawaran, kontrak, mobilisasi, laporan harian, BBM, invoice, pembayaran, dan kwitansi.</li>
+                        <li>Cetak semua route print aktif dan pastikan data tampil lengkap.</li>
+                        <li>Cek laporan pendapatan, unit, kontrak, piutang, maintenance, dan HPP untuk memastikan data ikut terekap.</li>
+                    </ol>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function openDoc(sectionId) {
+            document.getElementById("home-view").classList.add("hidden");
+            document.getElementById("doc-view").classList.remove("hidden");
+
+            const sections = document.querySelectorAll(".doc-section");
+            sections.forEach((section) => {
+                section.classList.add("hidden");
+            });
+
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.remove("hidden");
+                document.querySelector("main").scrollTop = 0;
+            }
+
+            const links = document.querySelectorAll(".sidebar-link");
+            links.forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("data-target") === sectionId) {
+                    link.classList.add("active");
+                }
+            });
+        }
+
+        function goHome() {
+            document.getElementById("doc-view").classList.add("hidden");
+            document.getElementById("home-view").classList.remove("hidden");
+
+            const links = document.querySelectorAll(".sidebar-link");
+            links.forEach((link) => link.classList.remove("active"));
+        }
+    </script>
+</body>
+</html>

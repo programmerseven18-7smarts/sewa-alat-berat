@@ -29,6 +29,7 @@ const Calendar: React.FC = () => {
   const [eventLevel, setEventLevel] = useState("");
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const calendarRef = useRef<FullCalendar>(null);
+  const nextEventId = useRef(4);
   const { isOpen, openModal, closeModal } = useModal();
 
   const calendarsEvents = {
@@ -99,7 +100,7 @@ const Calendar: React.FC = () => {
     } else {
       // Add new event
       const newEvent: CalendarEvent = {
-        id: Date.now().toString(),
+        id: `event-${nextEventId.current++}`,
         title: eventTitle,
         start: eventStartDate,
         end: eventEndDate,
