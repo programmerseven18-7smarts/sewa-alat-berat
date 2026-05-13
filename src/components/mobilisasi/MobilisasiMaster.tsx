@@ -31,6 +31,9 @@ export type MobilisasiRow = {
   biayaDemobilisasi: number;
   status: string;
   catatan: string | null;
+  fotoBerangkatUrl: string | null;
+  fotoTibaUrl: string | null;
+  buktiTransferUrl: string | null;
 };
 
 type MobilisasiMasterProps = {
@@ -118,6 +121,28 @@ export default function MobilisasiMaster({
           placeholder: "Pilih status",
           options: statusOptions,
         },
+        {
+          name: "fotoBerangkatUrl",
+          label: "Foto Berangkat",
+          type: "image",
+          placeholder: "Upload foto berangkat",
+          colSpan: "full",
+        },
+        {
+          name: "fotoTibaUrl",
+          label: "Foto Tiba",
+          type: "image",
+          placeholder: "Upload foto tiba",
+          colSpan: "full",
+        },
+        {
+          name: "buktiTransferUrl",
+          label: "Bukti Transfer",
+          type: "file",
+          accept: "image/*,.pdf",
+          placeholder: "Upload bukti transfer",
+          colSpan: "full",
+        },
         { name: "catatan", label: "Catatan", placeholder: "Catatan mobilisasi", colSpan: "full" },
       ]}
       columns={[
@@ -168,6 +193,20 @@ export default function MobilisasiMaster({
               {item.status}
             </Badge>
           ),
+        },
+        {
+          header: "Dokumen",
+          className: "whitespace-nowrap",
+          render: (item) => {
+            const count = [item.fotoBerangkatUrl, item.fotoTibaUrl, item.buktiTransferUrl].filter(Boolean).length;
+            return count > 0 ? (
+              <span className="rounded-full bg-success-50 px-2 py-1 text-xs font-medium text-success-700 dark:bg-success-500/10 dark:text-success-300">
+                {count} file
+              </span>
+            ) : (
+              <span className="text-gray-400">-</span>
+            );
+          },
         },
         {
           header: "Cetak",

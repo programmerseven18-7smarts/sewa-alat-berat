@@ -96,6 +96,9 @@ export const createMobilisasiAction = async (formData: FormData) => {
         biayaDemobilisasi: String(nullableNumberValue(formData, "biayaDemobilisasi") ?? 0),
         status: mobilisasiStatus(formData),
         catatan: nullableValue(formData, "catatan"),
+        fotoBerangkatUrl: nullableValue(formData, "fotoBerangkatUrl"),
+        fotoTibaUrl: nullableValue(formData, "fotoTibaUrl"),
+        buktiTransferUrl: nullableValue(formData, "buktiTransferUrl"),
       },
     });
   } catch (error) {
@@ -155,6 +158,9 @@ export const updateMobilisasiAction = async (formData: FormData) => {
         biayaDemobilisasi: String(nullableNumberValue(formData, "biayaDemobilisasi") ?? 0),
         status: mobilisasiStatus(formData),
         catatan: nullableValue(formData, "catatan"),
+        fotoBerangkatUrl: nullableValue(formData, "fotoBerangkatUrl"),
+        fotoTibaUrl: nullableValue(formData, "fotoTibaUrl"),
+        buktiTransferUrl: nullableValue(formData, "buktiTransferUrl"),
       },
     });
   } catch (error) {

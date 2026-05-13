@@ -1076,6 +1076,7 @@ export const createEquipmentUnitAction = async (formData: FormData) => {
           ? null
           : String(nullableNumberValue(formData, "currentHm")),
         catatan: nullableValue(formData, "catatan"),
+        photoUrl: nullableValue(formData, "photoUrl"),
       },
     });
   } catch (error) {
@@ -1128,6 +1129,7 @@ export const updateEquipmentUnitAction = async (formData: FormData) => {
         tarifBulanan: String(numberValue(formData, "tarifBulanan")),
         currentHm: currentHm === null ? null : String(currentHm),
         catatan: nullableValue(formData, "catatan"),
+        photoUrl: nullableValue(formData, "photoUrl"),
       },
     });
   } catch (error) {

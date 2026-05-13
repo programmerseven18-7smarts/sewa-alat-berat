@@ -104,7 +104,13 @@ export default function MaintenancePartMaster({
           { name: "harga", label: "Harga", type: "number", placeholder: "0" },
           { name: "qty", label: "Qty", type: "number", placeholder: "1" },
           { name: "satuan", label: "Satuan", placeholder: "pcs / set / lot" },
-          { name: "fotoUrl", label: "URL Foto", placeholder: "https://...", colSpan: "full" },
+          {
+            name: "fotoUrl",
+            label: "Foto Part / Bukti",
+            type: "image",
+            placeholder: "Upload foto part atau bukti",
+            colSpan: "full",
+          },
         ]}
         columns={[
           {
@@ -136,6 +142,20 @@ export default function MaintenancePartMaster({
             header: "Total",
             className: "whitespace-nowrap font-semibold text-gray-800 dark:text-white/90",
             render: (item) => formatRupiah(item.total),
+          },
+          {
+            header: "Foto",
+            className: "w-[76px]",
+            render: (item) =>
+              item.fotoUrl ? (
+                <img
+                  src={item.fotoUrl}
+                  alt={item.namaPart}
+                  className="h-12 w-16 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
+                />
+              ) : (
+                <span className="text-gray-400">-</span>
+              ),
           },
           {
             header: "Sparepart",

@@ -33,6 +33,7 @@ export default async function UnitPage() {
         tarifBulanan: true,
         currentHm: true,
         catatan: true,
+        photoUrl: true,
         category: {
           select: {
             nama: true,
@@ -87,6 +88,7 @@ export default async function UnitPage() {
         tarifBulanan: Number(item.tarifBulanan),
         currentHm: item.currentHm === null ? null : Number(item.currentHm),
         catatan: item.catatan,
+        photoUrl: item.photoUrl,
       }))}
     />
   );

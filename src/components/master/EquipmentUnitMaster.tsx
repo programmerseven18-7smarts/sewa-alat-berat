@@ -37,6 +37,7 @@ export type EquipmentUnitRow = {
   tarifBulanan: number;
   currentHm: number | null;
   catatan: string | null;
+  photoUrl: string | null;
 };
 
 type EquipmentUnitMasterProps = {
@@ -115,9 +116,32 @@ export default function EquipmentUnitMaster({
         { name: "tarifHarian", label: "Tarif Harian", type: "number", placeholder: "2500000" },
         { name: "tarifBulanan", label: "Tarif Bulanan", type: "number", placeholder: "55000000" },
         { name: "currentHm", label: "HM Saat Ini", type: "number", placeholder: "2350" },
+        {
+          name: "photoUrl",
+          label: "Foto Unit",
+          type: "image",
+          placeholder: "Upload foto unit",
+          colSpan: "full",
+        },
         { name: "catatan", label: "Catatan", placeholder: "Catatan unit", colSpan: "full" },
       ]}
       columns={[
+        {
+          header: "Foto",
+          className: "w-[76px]",
+          render: (item) =>
+            item.photoUrl ? (
+              <img
+                src={item.photoUrl}
+                alt={item.kodeLambung}
+                className="h-12 w-16 rounded-lg border border-gray-200 object-cover dark:border-gray-700"
+              />
+            ) : (
+              <div className="flex h-12 w-16 items-center justify-center rounded-lg border border-dashed border-gray-200 text-xs text-gray-400 dark:border-gray-700">
+                No img
+              </div>
+            ),
+        },
         {
           header: "Kode Lambung",
           className: "font-semibold text-gray-800 dark:text-white/90",

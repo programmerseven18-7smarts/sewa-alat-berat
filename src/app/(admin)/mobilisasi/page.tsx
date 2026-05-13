@@ -36,6 +36,9 @@ export default async function MobilisasiPage() {
         biayaDemobilisasi: true,
         status: true,
         catatan: true,
+        fotoBerangkatUrl: true,
+        fotoTibaUrl: true,
+        buktiTransferUrl: true,
         unit: {
           select: {
             kodeLambung: true,
@@ -128,6 +131,9 @@ export default async function MobilisasiPage() {
         biayaDemobilisasi: Number(item.biayaDemobilisasi),
         status: item.status,
         catatan: item.catatan,
+        fotoBerangkatUrl: item.fotoBerangkatUrl,
+        fotoTibaUrl: item.fotoTibaUrl,
+        buktiTransferUrl: item.buktiTransferUrl,
       }))}
     />
   );

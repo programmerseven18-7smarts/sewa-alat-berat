@@ -137,18 +137,20 @@ export default function MasterDataTable<T extends MasterRecord>({
                 <button
                   type="button"
                   onClick={() => openEdit(item)}
-                  className="rounded-lg p-2 text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/10"
+                  className="inline-flex size-9 items-center justify-center rounded-lg border border-brand-100 bg-brand-50 text-brand-600 shadow-theme-xs transition hover:border-brand-200 hover:bg-brand-100 hover:text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20"
                   aria-label={`Edit ${getItemName(item)}`}
+                  title="Edit"
                 >
-                  <PencilIcon className="size-4" />
+                  <PencilIcon className="size-[18px]" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setDeleteItem(item)}
-                  className="rounded-lg p-2 text-gray-500 hover:bg-error-50 hover:text-error-500 dark:text-gray-400 dark:hover:bg-error-500/10"
+                  className="inline-flex size-9 items-center justify-center rounded-lg border border-error-100 bg-error-50 text-error-600 shadow-theme-xs transition hover:border-error-200 hover:bg-error-100 hover:text-error-700 dark:border-error-500/20 dark:bg-error-500/10 dark:text-error-300 dark:hover:bg-error-500/20"
                   aria-label={`Hapus ${getItemName(item)}`}
+                  title="Hapus"
                 >
-                  <TrashBinIcon className="size-4" />
+                  <TrashBinIcon className="size-[18px]" />
                 </button>
               </div>
             </div>
@@ -210,18 +212,20 @@ export default function MasterDataTable<T extends MasterRecord>({
                       <button
                         type="button"
                         onClick={() => openEdit(item)}
-                        className="rounded p-2 text-gray-500 hover:bg-brand-50 hover:text-brand-500 dark:text-gray-400 dark:hover:bg-brand-500/10"
+                        className="inline-flex size-9 items-center justify-center rounded-lg border border-brand-100 bg-brand-50 text-brand-600 shadow-theme-xs transition hover:border-brand-200 hover:bg-brand-100 hover:text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300 dark:hover:bg-brand-500/20"
                         aria-label={`Edit ${getItemName(item)}`}
+                        title="Edit"
                       >
-                        <PencilIcon className="size-4" />
+                        <PencilIcon className="size-[18px]" />
                       </button>
                       <button
                         type="button"
                         onClick={() => setDeleteItem(item)}
-                        className="rounded p-2 text-gray-500 hover:bg-error-50 hover:text-error-500 dark:text-gray-400 dark:hover:bg-error-500/10"
+                        className="inline-flex size-9 items-center justify-center rounded-lg border border-error-100 bg-error-50 text-error-600 shadow-theme-xs transition hover:border-error-200 hover:bg-error-100 hover:text-error-700 dark:border-error-500/20 dark:bg-error-500/10 dark:text-error-300 dark:hover:bg-error-500/20"
                         aria-label={`Hapus ${getItemName(item)}`}
+                        title="Hapus"
                       >
-                        <TrashBinIcon className="size-4" />
+                        <TrashBinIcon className="size-[18px]" />
                       </button>
                     </div>
                   </TableCell>

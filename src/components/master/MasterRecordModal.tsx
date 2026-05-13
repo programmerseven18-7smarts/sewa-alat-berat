@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import DatePicker from "@/components/form/date-picker";
+import FileUploadPreview from "@/components/form/FileUploadPreview";
 import Input from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import { Modal } from "@/components/ui/modal";
 
-type FieldType = "text" | "number" | "email" | "date" | "select";
+type FieldType = "text" | "number" | "email" | "date" | "select" | "image" | "file";
 
 export type MasterRecordField = {
   name: string;
@@ -13,6 +15,7 @@ export type MasterRecordField = {
   type?: FieldType;
   placeholder?: string;
   options?: { value: string; label: string }[];
+  accept?: string;
   colSpan?: "full";
   readOnly?: boolean;
 };
@@ -107,6 +110,21 @@ export default function MasterRecordModal({
                     />
                     <input type="hidden" name={field.name} value={selectValues[field.name] || ""} />
                   </>
+                ) : field.type === "date" ? (
+                  <DatePicker
+                    id={`modal-${field.name}`}
+                    name={field.name}
+                    placeholder={field.placeholder || "Pilih tanggal"}
+                    defaultDate={String(initialValues?.[field.name] ?? "")}
+                  />
+                ) : field.type === "image" || field.type === "file" ? (
+                  <FileUploadPreview
+                    name={field.name}
+                    kind={field.type}
+                    accept={field.accept || (field.type === "image" ? "image/*" : undefined)}
+                    placeholder={field.placeholder || (field.type === "image" ? "Upload gambar" : "Upload dokumen")}
+                    defaultValue={initialValues?.[field.name]}
+                  />
                 ) : (
                   <Input
                     name={field.name}
