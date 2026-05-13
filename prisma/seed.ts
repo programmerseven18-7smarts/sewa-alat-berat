@@ -60,6 +60,36 @@ const createAuditLogOnce = async (data: Parameters<typeof prisma.auditLog.create
   }
 };
 
+const createBankAccountOnce = async (data: {
+  namaBank: string;
+  cabang?: string;
+  noRekening: string;
+  atasNama: string;
+  isDefault?: boolean;
+}) => {
+  const exists = await prisma.bankAccount.findFirst({
+    where: { noRekening: data.noRekening },
+  });
+
+  if (!exists) {
+    await prisma.bankAccount.create({ data });
+  }
+};
+
+const createAttachmentOnce = async (data: Parameters<typeof prisma.attachment.create>[0]["data"]) => {
+  const exists = await prisma.attachment.findFirst({
+    where: {
+      entityType: data.entityType,
+      entityId: data.entityId,
+      fileName: data.fileName,
+    },
+  });
+
+  if (!exists) {
+    await prisma.attachment.create({ data });
+  }
+};
+
 async function seedRbac() {
   await prisma.rolePermission.deleteMany();
   await prisma.userRole.deleteMany();
@@ -389,32 +419,31 @@ async function seedMasters() {
     skipDuplicates: true,
   });
 
-  await prisma.bankAccount.createMany({
-    data: [
-      {
-        namaBank: "Bank Mandiri",
-        cabang: "Bekasi",
-        noRekening: "1670007424012",
-        atasNama: "DIVA KUSUMA PUTRI",
-        isDefault: true,
-      },
-      {
-        namaBank: "Bank Mandiri",
-        cabang: "Samarinda",
-        noRekening: "1480094747576",
-        atasNama: "MAHAKAM GEMILANG MANDIRI",
-        isDefault: false,
-      },
-      {
-        namaBank: "BCA",
-        cabang: "Bekasi",
-        noRekening: "8899001122",
-        atasNama: "PT SEWA ALAT BERAT NUSANTARA",
-        isDefault: false,
-      },
-    ],
-    skipDuplicates: true,
-  });
+  for (const bankAccount of [
+    {
+      namaBank: "Bank Mandiri",
+      cabang: "Bekasi",
+      noRekening: "1670007424012",
+      atasNama: "DIVA KUSUMA PUTRI",
+      isDefault: true,
+    },
+    {
+      namaBank: "Bank Mandiri",
+      cabang: "Samarinda",
+      noRekening: "1480094747576",
+      atasNama: "MAHAKAM GEMILANG MANDIRI",
+      isDefault: false,
+    },
+    {
+      namaBank: "BCA",
+      cabang: "Bekasi",
+      noRekening: "8899001122",
+      atasNama: "PT SEWA ALAT BERAT NUSANTARA",
+      isDefault: false,
+    },
+  ]) {
+    await createBankAccountOnce(bankAccount);
+  }
 
   await prisma.equipmentUnit.createMany({
     data: [
@@ -957,11 +986,530 @@ async function seedMaintenanceAndHpp() {
   });
 }
 
+async function seedExpandedMasters() {
+  await prisma.projectLocation.createMany({
+    data: [
+      {
+        kode: "LOC-SMR",
+        nama: "Project Samarinda Ring Road",
+        alamat: "Jl. Ring Road Samarinda",
+        kota: "Samarinda",
+        provinsi: "Kalimantan Timur",
+        picNama: "Bpk. Arif",
+        picTelepon: "081200000010",
+      },
+      {
+        kode: "LOC-BPN",
+        nama: "Project Balikpapan Quarry",
+        alamat: "Karang Joang",
+        kota: "Balikpapan",
+        provinsi: "Kalimantan Timur",
+        picNama: "Ibu Maya",
+        picTelepon: "081200000011",
+      },
+      {
+        kode: "LOC-IKN",
+        nama: "Project IKN Infrastruktur",
+        alamat: "Sepaku",
+        kota: "Penajam Paser Utara",
+        provinsi: "Kalimantan Timur",
+        picNama: "Bpk. Raka",
+        picTelepon: "081200000012",
+      },
+      {
+        kode: "LOC-PLB",
+        nama: "Project Pelabuhan Patimban",
+        alamat: "Patimban",
+        kota: "Subang",
+        provinsi: "Jawa Barat",
+        picNama: "Ibu Lestari",
+        picTelepon: "081200000013",
+      },
+      {
+        kode: "LOC-BDG",
+        nama: "Project Bandung Timur",
+        alamat: "Gedebage",
+        kota: "Bandung",
+        provinsi: "Jawa Barat",
+        picNama: "Bpk. Rangga",
+        picTelepon: "081200000014",
+      },
+      {
+        kode: "LOC-TGR",
+        nama: "Project Tangerang Warehouse",
+        alamat: "Cikupa",
+        kota: "Tangerang",
+        provinsi: "Banten",
+        picNama: "Ibu Nabila",
+        picTelepon: "081200000015",
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.customer.createMany({
+    data: [
+      {
+        kode: "CUST-007",
+        nama: "PT Kalimantan Prima Infrastruktur",
+        picNama: "Bpk. Arif",
+        telepon: "0541000007",
+        email: "site@kalprimainfra.local",
+        alamat: "Samarinda",
+        kota: "Samarinda",
+        npwp: "04.567.890.1-234.000",
+      },
+      {
+        kode: "CUST-008",
+        nama: "PT Karya Quarry Balikpapan",
+        picNama: "Ibu Maya",
+        telepon: "0542000008",
+        email: "admin@karyaquarry.local",
+        alamat: "Karang Joang",
+        kota: "Balikpapan",
+        npwp: "05.678.901.2-345.000",
+      },
+      {
+        kode: "CUST-009",
+        nama: "PT Mandiri Beton Perkasa",
+        picNama: "Bpk. Hadi",
+        telepon: "0220000009",
+        email: "finance@mandiribeton.local",
+        alamat: "Gedebage",
+        kota: "Bandung",
+        npwp: "06.789.012.3-456.000",
+      },
+      {
+        kode: "CUST-010",
+        nama: "PT Pelabuhan Subang Raya",
+        picNama: "Ibu Lestari",
+        telepon: "0260000010",
+        email: "ops@pelabuhansubang.local",
+        alamat: "Patimban",
+        kota: "Subang",
+        npwp: "07.890.123.4-567.000",
+      },
+      {
+        kode: "CUST-011",
+        nama: "PT Citra Gudang Logistik",
+        picNama: "Ibu Nabila",
+        telepon: "0210000011",
+        email: "project@citragudang.local",
+        alamat: "Cikupa",
+        kota: "Tangerang",
+        npwp: "08.901.234.5-678.000",
+      },
+      {
+        kode: "CUST-012",
+        nama: "PT IKN Konstruksi Nusantara",
+        picNama: "Bpk. Raka",
+        telepon: "0543000012",
+        email: "admin@iknkonstruksi.local",
+        alamat: "Sepaku",
+        kota: "Penajam Paser Utara",
+        npwp: "09.012.345.6-789.000",
+      },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.supplier.createMany({
+    data: [
+      { kode: "SUP-FILTER", nama: "Prima Filter Nusantara", picNama: "Herman", telepon: "081300000007" },
+      { kode: "SUP-OIL", nama: "Mega Oli Diesel", picNama: "Sari", telepon: "081300000008", email: "sales@megaoli.local" },
+      { kode: "SUP-BATTERY", nama: "Aki Jaya Mandiri", picNama: "Bambang", telepon: "081300000009" },
+      { kode: "SUP-TRACK", nama: "Track Shoe Specialist", picNama: "Rudi", telepon: "081300000010" },
+    ],
+    skipDuplicates: true,
+  });
+
+  const [categories, locations, suppliers] = await Promise.all([
+    prisma.equipmentCategory.findMany(),
+    prisma.projectLocation.findMany(),
+    prisma.supplier.findMany(),
+  ]);
+  const category = Object.fromEntries(categories.map((item) => [item.kode, item]));
+  const location = Object.fromEntries(locations.map((item) => [item.kode, item]));
+  const supplier = Object.fromEntries(suppliers.map((item) => [item.kode, item]));
+
+  await prisma.sparepart.createMany({
+    data: [
+      { kode: "SP-OIL-15W40", nama: "Engine Oil 15W-40", satuan: "PAIL", hargaSatuan: 1650000, stok: 12, supplierId: supplier["SUP-OIL"].id },
+      { kode: "SP-HYD-68", nama: "Hydraulic Oil AW 68", satuan: "DRUM", hargaSatuan: 5850000, stok: 5, supplierId: supplier["SUP-OIL"].id },
+      { kode: "SP-GREASE", nama: "Grease EP2", satuan: "PAIL", hargaSatuan: 890000, stok: 9, supplierId: supplier["SUP-OIL"].id },
+      { kode: "SP-AKI-150", nama: "Battery N150", satuan: "PCS", hargaSatuan: 2350000, stok: 6, supplierId: supplier["SUP-BATTERY"].id },
+      { kode: "SP-TRACK-PC200", nama: "Track Shoe PC200", satuan: "PCS", hargaSatuan: 1450000, stok: 28, supplierId: supplier["SUP-TRACK"].id },
+      { kode: "SP-CUTTING-EDGE", nama: "Cutting Edge Dozer", satuan: "SET", hargaSatuan: 7200000, stok: 3, supplierId: supplier["SUP-TRACK"].id },
+      { kode: "SP-AIR-FILTER", nama: "Air Filter Heavy Duty", satuan: "PCS", hargaSatuan: 680000, stok: 14, supplierId: supplier["SUP-FILTER"].id },
+      { kode: "SP-FUEL-FILTER", nama: "Fuel Filter Heavy Duty", satuan: "PCS", hargaSatuan: 520000, stok: 16, supplierId: supplier["SUP-FILTER"].id },
+    ],
+    skipDuplicates: true,
+  });
+
+  for (const bankAccount of [
+    { namaBank: "BRI", cabang: "Samarinda", noRekening: "112233445566", atasNama: "PT SEWA ALAT BERAT NUSANTARA", isDefault: false },
+    { namaBank: "BNI", cabang: "Balikpapan", noRekening: "998877665544", atasNama: "PT SEWA ALAT BERAT NUSANTARA", isDefault: false },
+  ]) {
+    await createBankAccountOnce(bankAccount);
+  }
+
+  await prisma.equipmentUnit.createMany({
+    data: [
+      { kodeLambung: "EXC-004", categoryId: category["EXC"].id, merk: "Komatsu", model: "PC 210-10M0", tahun: 2022, status: "On Duty", locationId: location["LOC-SMR"].id, tarifHarian: 535000, tarifBulanan: 107000000, currentHm: 940 },
+      { kodeLambung: "EXC-005", categoryId: category["EXC"].id, merk: "Kobelco", model: "SK200-10", tahun: 2021, status: "Stand By", locationId: location["LOC-BPN"].id, tarifHarian: 500000, tarifBulanan: 100000000, currentHm: 1680 },
+      { kodeLambung: "BLD-003", categoryId: category["BLD"].id, merk: "Komatsu", model: "D65PX", tahun: 2020, status: "On Duty", locationId: location["LOC-IKN"].id, tarifHarian: 520000, tarifBulanan: 104000000, currentHm: 2985 },
+      { kodeLambung: "DT-011", categoryId: category["DT"].id, merk: "Hino", model: "500 FM 260 JD", tahun: 2023, noPolisi: "B 9011 DT", status: "On Duty", locationId: location["LOC-PLB"].id, tarifHarian: 2650000, tarifBulanan: 58500000, currentHm: 0 },
+      { kodeLambung: "DT-012", categoryId: category["DT"].id, merk: "Mitsubishi", model: "Fuso FN 527", tahun: 2021, noPolisi: "B 9012 DT", status: "Stand By", locationId: location["LOC-BKS"].id, tarifHarian: 2450000, tarifBulanan: 54000000, currentHm: 0 },
+      { kodeLambung: "WL-002", categoryId: category["WL"].id, merk: "XCMG", model: "LW500KN", tahun: 2022, status: "On Duty", locationId: location["LOC-BDG"].id, tarifHarian: 410000, tarifBulanan: 82000000, currentHm: 760 },
+      { kodeLambung: "GRD-002", categoryId: category["GRD"].id, merk: "Caterpillar", model: "140K", tahun: 2019, status: "Stand By", locationId: location["LOC-TGR"].id, tarifHarian: 470000, tarifBulanan: 94000000, currentHm: 3230 },
+      { kodeLambung: "VIB-002", categoryId: category["VIB"].id, merk: "Dynapac", model: "CA250D", tahun: 2020, status: "On Duty", locationId: location["LOC-PLB"].id, tarifHarian: 3100000, tarifBulanan: 62000000, currentHm: 1420 },
+      { kodeLambung: "SL-002", categoryId: category["SL"].id, merk: "Isuzu", model: "Giga Self Loader", tahun: 2022, noPolisi: "B 9202 SL", status: "Stand By", locationId: location["LOC-BKS"].id, tarifHarian: 3600000, tarifBulanan: 72000000, currentHm: 0 },
+    ],
+    skipDuplicates: true,
+  });
+
+  const units = await prisma.equipmentUnit.findMany();
+  const unit = Object.fromEntries(units.map((item) => [item.kodeLambung, item]));
+
+  await prisma.operator.createMany({
+    data: [
+      { kode: "OP-006", nama: "Agus Firmansyah", telepon: "081400000006", simType: "SIO", simNo: "SIO-006", status: "Aktif", unitId: unit["EXC-004"].id },
+      { kode: "OP-007", nama: "Mulyadi", telepon: "081400000007", simType: "SIO", simNo: "SIO-007", status: "Aktif", unitId: unit["BLD-003"].id },
+      { kode: "OP-008", nama: "Eko Prasetyo", telepon: "081400000008", simType: "SIO", simNo: "SIO-008", status: "Aktif", unitId: unit["WL-002"].id },
+      { kode: "OP-009", nama: "Ridwan Hakim", telepon: "081400000009", simType: "SIO", simNo: "SIO-009", status: "Cuti", unitId: unit["GRD-002"].id },
+      { kode: "OP-010", nama: "Fajar Nugroho", telepon: "081400000010", simType: "SIO", simNo: "SIO-010", status: "Aktif", unitId: unit["VIB-002"].id },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.driver.createMany({
+    data: [
+      { kode: "DRV-004", nama: "Suryanto", noKtp: "3275000000000005", telepon: "081500000004", noSim: "B2-004", status: "Aktif" },
+      { kode: "DRV-005", nama: "Asep Suhendar", noKtp: "3275000000000006", telepon: "081500000005", noSim: "B2-005", status: "Aktif" },
+      { kode: "DRV-006", nama: "Junaedi", noKtp: "3275000000000007", telepon: "081500000006", noSim: "B2-006", status: "Stand By" },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.rentalRate.createMany({
+    data: [
+      { categoryId: category["EXC"].id, nama: "Excavator PC210", satuan: "Jam", tarif: 535000, minimum: 8 },
+      { categoryId: category["EXC"].id, nama: "Excavator SK200", satuan: "Jam", tarif: 500000, minimum: 8 },
+      { categoryId: category["BLD"].id, nama: "Bulldozer D65PX", satuan: "Jam", tarif: 520000, minimum: 200 },
+      { categoryId: category["DT"].id, nama: "Dump Truck FM 260 JD", satuan: "Hari", tarif: 2650000, minimum: 1 },
+      { categoryId: category["WL"].id, nama: "Wheel Loader LW500KN", satuan: "Jam", tarif: 410000, minimum: 8 },
+      { categoryId: category["GRD"].id, nama: "Motor Grader 140K", satuan: "Jam", tarif: 470000, minimum: 8 },
+      { categoryId: category["SL"].id, nama: "Self Loader Giga", satuan: "Trip", tarif: 3600000, minimum: 1 },
+    ],
+  });
+}
+
+async function seedExpandedTransactions() {
+  const [customers, units, operators, drivers, locations, banks] = await Promise.all([
+    prisma.customer.findMany(),
+    prisma.equipmentUnit.findMany(),
+    prisma.operator.findMany(),
+    prisma.driver.findMany(),
+    prisma.projectLocation.findMany(),
+    prisma.bankAccount.findMany(),
+  ]);
+  const customer = Object.fromEntries(customers.map((item) => [item.kode, item]));
+  const unit = Object.fromEntries(units.map((item) => [item.kodeLambung, item]));
+  const operator = Object.fromEntries(operators.map((item) => [item.kode, item]));
+  const driver = Object.fromEntries(drivers.map((item) => [item.kode, item]));
+  const location = Object.fromEntries(locations.map((item) => [item.kode, item]));
+  const defaultBank = banks.find((bank) => bank.isDefault) ?? banks[0];
+
+  await prisma.rentalRequest.createMany({
+    data: [
+      { noPermintaan: "REQ-2026-0002", customerId: customer["CUST-004"].id, tanggal: date("2026-05-04"), lokasi: "Karawang Industrial", jenisAlat: "Excavator ZX 200", mulaiSewa: date("2026-05-08"), akhirSewa: date("2026-06-08"), estimasiJam: 220, status: "Disetujui", catatan: "Termasuk operator dan solar by customer." },
+      { noPermintaan: "REQ-2026-0003", customerId: customer["CUST-005"].id, tanggal: date("2026-05-05"), lokasi: "Morowali", jenisAlat: "Bulldozer D6R", mulaiSewa: date("2026-05-10"), akhirSewa: date("2026-08-10"), estimasiJam: 600, status: "Diproses", catatan: "Lokasi tambang, butuh unit siap kerja." },
+      { noPermintaan: "REQ-2026-0004", customerId: customer["CUST-007"].id, tanggal: date("2026-05-06"), lokasi: "Samarinda Ring Road", jenisAlat: "Excavator PC210", mulaiSewa: date("2026-05-12"), akhirSewa: date("2026-07-12"), estimasiJam: 420, status: "Disetujui", catatan: "Pekerjaan drainase dan galian." },
+      { noPermintaan: "REQ-2026-0005", customerId: customer["CUST-008"].id, tanggal: date("2026-05-07"), lokasi: "Balikpapan Quarry", jenisAlat: "Excavator SK200", mulaiSewa: date("2026-05-14"), akhirSewa: date("2026-06-14"), estimasiJam: 260, status: "Pending", catatan: "Menunggu final PO." },
+      { noPermintaan: "REQ-2026-0006", customerId: customer["CUST-010"].id, tanggal: date("2026-05-08"), lokasi: "Patimban", jenisAlat: "Dump Truck dan Vibro", mulaiSewa: date("2026-05-15"), akhirSewa: date("2026-07-15"), estimasiJam: 360, status: "Disetujui", catatan: "Butuh ritase harian." },
+      { noPermintaan: "REQ-2026-0007", customerId: customer["CUST-012"].id, tanggal: date("2026-05-09"), lokasi: "IKN Sepaku", jenisAlat: "Bulldozer D65PX", mulaiSewa: date("2026-05-18"), akhirSewa: date("2026-09-18"), estimasiJam: 820, status: "Diproses", catatan: "Kontrak jangka panjang." },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.quotation.createMany({
+    data: [
+      { noPenawaran: "QTN-2026-0002", customerId: customer["CUST-004"].id, tanggal: date("2026-05-04"), berlakuHingga: date("2026-05-18"), unitId: unit["EXC-002"].id, tarif: 510000, satuan: "Jam", estimasiTotal: 112200000, status: "Disetujui", catatan: "Minimum 220 jam." },
+      { noPenawaran: "QTN-2026-0003", customerId: customer["CUST-005"].id, tanggal: date("2026-05-05"), berlakuHingga: date("2026-05-19"), unitId: unit["BLD-002"].id, tarif: 455000, satuan: "Jam", estimasiTotal: 273000000, status: "Terkirim", catatan: "Mobilisasi Morowali dihitung terpisah." },
+      { noPenawaran: "QTN-2026-0004", customerId: customer["CUST-007"].id, tanggal: date("2026-05-06"), berlakuHingga: date("2026-05-20"), unitId: unit["EXC-004"].id, tarif: 535000, satuan: "Jam", estimasiTotal: 224700000, status: "Disetujui", catatan: "Termasuk operator." },
+      { noPenawaran: "QTN-2026-0005", customerId: customer["CUST-010"].id, tanggal: date("2026-05-08"), berlakuHingga: date("2026-05-22"), unitId: unit["DT-011"].id, tarif: 2650000, satuan: "Hari", estimasiTotal: 159000000, status: "Disetujui", catatan: "Ritase internal area project." },
+      { noPenawaran: "QTN-2026-0006", customerId: customer["CUST-012"].id, tanggal: date("2026-05-09"), berlakuHingga: date("2026-05-23"), unitId: unit["BLD-003"].id, tarif: 520000, satuan: "Jam", estimasiTotal: 426400000, status: "Terkirim", catatan: "Minimum 820 jam." },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.rentalContract.createMany({
+    data: [
+      { noKontrak: "KTR-2026-0002", customerId: customer["CUST-004"].id, unitId: unit["EXC-002"].id, operatorId: operator["OP-003"].id, locationId: location["LOC-KRW"].id, tanggalKontrak: date("2026-05-08"), mulaiSewa: date("2026-05-08"), akhirSewa: date("2026-06-08"), tarif: 510000, satuan: "Jam", nilaiKontrak: 112200000, dp: 20000000, status: "Aktif", catatan: "Shift normal 8 jam." },
+      { noKontrak: "KTR-2026-0003", customerId: customer["CUST-005"].id, unitId: unit["BLD-002"].id, operatorId: operator["OP-004"].id, locationId: location["LOC-MRWL"].id, tanggalKontrak: date("2026-05-10"), mulaiSewa: date("2026-05-10"), akhirSewa: date("2026-08-10"), tarif: 455000, satuan: "Jam", nilaiKontrak: 273000000, dp: 50000000, status: "Aktif", catatan: "Unit standby di site Morowali." },
+      { noKontrak: "KTR-2026-0004", customerId: customer["CUST-007"].id, unitId: unit["EXC-004"].id, operatorId: operator["OP-006"].id, locationId: location["LOC-SMR"].id, tanggalKontrak: date("2026-05-12"), mulaiSewa: date("2026-05-12"), akhirSewa: date("2026-07-12"), tarif: 535000, satuan: "Jam", nilaiKontrak: 224700000, dp: 35000000, status: "Aktif", catatan: "Pekerjaan drainase ring road." },
+      { noKontrak: "KTR-2026-0005", customerId: customer["CUST-010"].id, unitId: unit["DT-011"].id, locationId: location["LOC-PLB"].id, tanggalKontrak: date("2026-05-15"), mulaiSewa: date("2026-05-15"), akhirSewa: date("2026-07-15"), tarif: 2650000, satuan: "Hari", nilaiKontrak: 159000000, dp: 30000000, status: "Aktif", catatan: "Dump truck untuk pemindahan material." },
+      { noKontrak: "KTR-2026-0006", customerId: customer["CUST-010"].id, unitId: unit["VIB-002"].id, operatorId: operator["OP-010"].id, locationId: location["LOC-PLB"].id, tanggalKontrak: date("2026-05-15"), mulaiSewa: date("2026-05-15"), akhirSewa: date("2026-07-15"), tarif: 3100000, satuan: "Hari", nilaiKontrak: 186000000, dp: 30000000, status: "Aktif", catatan: "Vibro untuk pemadatan akses pelabuhan." },
+      { noKontrak: "KTR-2026-0007", customerId: customer["CUST-012"].id, unitId: unit["BLD-003"].id, operatorId: operator["OP-007"].id, locationId: location["LOC-IKN"].id, tanggalKontrak: date("2026-05-18"), mulaiSewa: date("2026-05-18"), akhirSewa: date("2026-09-18"), tarif: 520000, satuan: "Jam", nilaiKontrak: 426400000, dp: 75000000, status: "Aktif", catatan: "Kontrak IKN tahap persiapan lahan." },
+      { noKontrak: "KTR-2026-0008", customerId: customer["CUST-009"].id, unitId: unit["WL-002"].id, operatorId: operator["OP-008"].id, locationId: location["LOC-BDG"].id, tanggalKontrak: date("2026-04-01"), mulaiSewa: date("2026-04-01"), akhirSewa: date("2026-04-30"), tarif: 410000, satuan: "Jam", nilaiKontrak: 82000000, dp: 10000000, status: "Selesai", catatan: "Kontrak selesai, menunggu pelunasan sisa invoice." },
+    ],
+    skipDuplicates: true,
+  });
+
+  const contracts = await prisma.rentalContract.findMany();
+  const contract = Object.fromEntries(contracts.map((item) => [item.noKontrak, item]));
+
+  const invoiceSeeds = [
+    {
+      noInvoice: "INV-2026-0002",
+      contractNo: "KTR-2026-0002",
+      customerCode: "CUST-004",
+      tanggal: "2026-05-20",
+      jatuhTempo: "2026-05-27",
+      subtotal: 32640000,
+      pajak: 3582000,
+      total: 36222000,
+      status: "Sebagian",
+      catatan: "Termin 1 Excavator ZX 200 Karawang.",
+      items: [
+        { deskripsi: "Sewa Excavator ZX 200 - 64 jam", volume: 64, satuan: "Jam", hargaSatuan: 510000, total: 32640000 },
+      ],
+    },
+    {
+      noInvoice: "INV-2026-0003",
+      contractNo: "KTR-2026-0003",
+      customerCode: "CUST-005",
+      tanggal: "2026-05-25",
+      jatuhTempo: "2026-06-01",
+      subtotal: 50050000,
+      pajak: 5505500,
+      total: 55555500,
+      status: "Belum Lunas",
+      catatan: "Termin 1 Bulldozer D6R Morowali.",
+      items: [
+        { deskripsi: "Sewa Bulldozer D6R - 110 jam", volume: 110, satuan: "Jam", hargaSatuan: 455000, total: 50050000 },
+      ],
+    },
+    {
+      noInvoice: "INV-2026-0004",
+      contractNo: "KTR-2026-0004",
+      customerCode: "CUST-007",
+      tanggal: "2026-05-26",
+      jatuhTempo: "2026-06-02",
+      subtotal: 42800000,
+      pajak: 4708000,
+      total: 47508000,
+      status: "Lunas",
+      catatan: "Termin 1 Excavator PC210 Samarinda.",
+      items: [
+        { deskripsi: "Sewa Excavator PC210 - 80 jam", volume: 80, satuan: "Jam", hargaSatuan: 535000, total: 42800000 },
+      ],
+    },
+    {
+      noInvoice: "INV-2026-0005",
+      contractNo: "KTR-2026-0005",
+      customerCode: "CUST-010",
+      tanggal: "2026-05-28",
+      jatuhTempo: "2026-06-04",
+      subtotal: 37100000,
+      pajak: 4081000,
+      total: 41181000,
+      status: "Belum Lunas",
+      catatan: "Sewa Dump Truck Patimban 14 hari.",
+      items: [
+        { deskripsi: "Sewa Dump Truck Hino DT-011", volume: 14, satuan: "Hari", hargaSatuan: 2650000, total: 37100000 },
+      ],
+    },
+    {
+      noInvoice: "INV-2026-0006",
+      contractNo: "KTR-2026-0008",
+      customerCode: "CUST-009",
+      tanggal: "2026-04-30",
+      jatuhTempo: "2026-05-07",
+      subtotal: 82000000,
+      pajak: 9020000,
+      total: 91020000,
+      status: "Sebagian",
+      catatan: "Final invoice Wheel Loader Bandung.",
+      items: [
+        { deskripsi: "Sewa Wheel Loader LW500KN - 200 jam", volume: 200, satuan: "Jam", hargaSatuan: 410000, total: 82000000 },
+      ],
+    },
+  ];
+
+  for (const invoiceSeed of invoiceSeeds) {
+    const rentalContract = contract[invoiceSeed.contractNo];
+    const invoice = await prisma.invoice.upsert({
+      where: { noInvoice: invoiceSeed.noInvoice },
+      update: {
+        contractId: rentalContract.id,
+        customerId: customer[invoiceSeed.customerCode].id,
+        tanggal: date(invoiceSeed.tanggal),
+        jatuhTempo: date(invoiceSeed.jatuhTempo),
+        tipe: "Sewa",
+        subtotal: invoiceSeed.subtotal,
+        pajak: invoiceSeed.pajak,
+        total: invoiceSeed.total,
+        status: invoiceSeed.status,
+        bankAccountId: defaultBank.id,
+        catatan: invoiceSeed.catatan,
+      },
+      create: {
+        noInvoice: invoiceSeed.noInvoice,
+        contractId: rentalContract.id,
+        customerId: customer[invoiceSeed.customerCode].id,
+        tanggal: date(invoiceSeed.tanggal),
+        jatuhTempo: date(invoiceSeed.jatuhTempo),
+        tipe: "Sewa",
+        subtotal: invoiceSeed.subtotal,
+        pajak: invoiceSeed.pajak,
+        total: invoiceSeed.total,
+        status: invoiceSeed.status,
+        bankAccountId: defaultBank.id,
+        catatan: invoiceSeed.catatan,
+      },
+    });
+
+    if ((await prisma.invoiceItem.count({ where: { invoiceId: invoice.id } })) === 0) {
+      await prisma.invoiceItem.createMany({
+        data: invoiceSeed.items.map((item) => ({ ...item, invoiceId: invoice.id })),
+      });
+    }
+  }
+
+  const invoices = await prisma.invoice.findMany();
+  const invoice = Object.fromEntries(invoices.map((item) => [item.noInvoice, item]));
+
+  await prisma.payment.createMany({
+    data: [
+      { noPembayaran: "PAY-2026-0002", invoiceId: invoice["INV-2026-0002"].id, tanggal: date("2026-05-21"), jumlah: 20000000, metode: "Transfer", bankAccountId: defaultBank.id, catatan: "Pembayaran termin 1 sebagian." },
+      { noPembayaran: "PAY-2026-0003", invoiceId: invoice["INV-2026-0004"].id, tanggal: date("2026-05-27"), jumlah: 47508000, metode: "Transfer", bankAccountId: defaultBank.id, catatan: "Pelunasan termin 1." },
+      { noPembayaran: "PAY-2026-0004", invoiceId: invoice["INV-2026-0006"].id, tanggal: date("2026-05-03"), jumlah: 50000000, metode: "Transfer", bankAccountId: defaultBank.id, catatan: "Pembayaran sebagian final invoice." },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.receipt.createMany({
+    data: [
+      { noKwitansi: "KWT-2026-0002", invoiceId: invoice["INV-2026-0002"].id, tanggal: date("2026-05-21"), diterimaDari: "PT Bumi Konstruksi Mandiri", untukPembayaran: "Termin 1 Excavator ZX 200 Karawang", jumlah: 20000000, terbilang: "Dua Puluh Juta Rupiah", bankAccountId: defaultBank.id, penandatangan: "Finance" },
+      { noKwitansi: "KWT-2026-0003", invoiceId: invoice["INV-2026-0004"].id, tanggal: date("2026-05-27"), diterimaDari: "PT Kalimantan Prima Infrastruktur", untukPembayaran: "Termin 1 Excavator PC210 Samarinda", jumlah: 47508000, terbilang: "Empat Puluh Tujuh Juta Lima Ratus Delapan Ribu Rupiah", bankAccountId: defaultBank.id, penandatangan: "Finance" },
+      { noKwitansi: "KWT-2026-0004", invoiceId: invoice["INV-2026-0006"].id, tanggal: date("2026-05-03"), diterimaDari: "PT Mandiri Beton Perkasa", untukPembayaran: "Final invoice Wheel Loader Bandung", jumlah: 50000000, terbilang: "Lima Puluh Juta Rupiah", bankAccountId: defaultBank.id, penandatangan: "Finance" },
+    ],
+    skipDuplicates: true,
+  });
+
+  await prisma.mobilisasi.createMany({
+    data: [
+      { noMobilisasi: "MOB-2026-0002", unitId: unit["EXC-002"].id, driverId: driver["DRV-002"].id, contractId: contract["KTR-2026-0002"].id, asalLokasi: "Pool Bekasi", tujuanLokasi: "Karawang Industrial", tanggalBerangkat: date("2026-05-07"), tanggalTiba: date("2026-05-08"), biayaMobilisasi: 4500000, biayaDemobilisasi: 4500000, status: "Selesai", catatan: "Mobilisasi malam hari." },
+      { noMobilisasi: "MOB-2026-0003", unitId: unit["BLD-002"].id, driverId: driver["DRV-003"].id, contractId: contract["KTR-2026-0003"].id, asalLokasi: "Pool Bekasi", tujuanLokasi: "Morowali", tanggalBerangkat: date("2026-05-06"), tanggalTiba: date("2026-05-10"), biayaMobilisasi: 42000000, biayaDemobilisasi: 42000000, status: "Selesai", catatan: "Via kapal roro." },
+      { noMobilisasi: "MOB-2026-0004", unitId: unit["EXC-004"].id, driverId: driver["DRV-004"].id, contractId: contract["KTR-2026-0004"].id, asalLokasi: "Balikpapan", tujuanLokasi: "Samarinda Ring Road", tanggalBerangkat: date("2026-05-11"), tanggalTiba: date("2026-05-12"), biayaMobilisasi: 8500000, biayaDemobilisasi: 8500000, status: "Selesai", catatan: "Lowbed lokal Kaltim." },
+      { noMobilisasi: "MOB-2026-0005", unitId: unit["DT-011"].id, driverId: driver["DRV-005"].id, contractId: contract["KTR-2026-0005"].id, asalLokasi: "Pool Bekasi", tujuanLokasi: "Patimban", tanggalBerangkat: date("2026-05-14"), tanggalTiba: date("2026-05-15"), biayaMobilisasi: 6200000, biayaDemobilisasi: 6200000, status: "Selesai", catatan: "Unit langsung operasional." },
+      { noMobilisasi: "MOB-2026-0006", unitId: unit["BLD-003"].id, driverId: driver["DRV-006"].id, contractId: contract["KTR-2026-0007"].id, asalLokasi: "Balikpapan", tujuanLokasi: "IKN Sepaku", tanggalBerangkat: date("2026-05-16"), tanggalTiba: date("2026-05-18"), biayaMobilisasi: 12000000, biayaDemobilisasi: 12000000, status: "Selesai", catatan: "Koordinasi masuk site IKN." },
+    ],
+    skipDuplicates: true,
+  });
+
+  for (const report of [
+    { contractId: contract["KTR-2026-0002"].id, unitId: unit["EXC-002"].id, operatorId: operator["OP-003"].id, tanggal: date("2026-05-20"), jamKerja: 8, fuelLiter: 75, hmAwal: 1288, hmAkhir: 1296, aktivitas: "Galian pondasi area workshop.", kendala: "Cuaca gerimis sore." },
+    { contractId: contract["KTR-2026-0002"].id, unitId: unit["EXC-002"].id, operatorId: operator["OP-003"].id, tanggal: date("2026-05-21"), jamKerja: 9, fuelLiter: 82, hmAwal: 1296, hmAkhir: 1305, aktivitas: "Loading disposal tanah merah.", kendala: null },
+    { contractId: contract["KTR-2026-0003"].id, unitId: unit["BLD-002"].id, operatorId: operator["OP-004"].id, tanggal: date("2026-05-20"), jamKerja: 10, fuelLiter: 115, hmAwal: 4020, hmAkhir: 4030, aktivitas: "Clearing dan spreading material.", kendala: "Menunggu dump truck 1 jam." },
+    { contractId: contract["KTR-2026-0004"].id, unitId: unit["EXC-004"].id, operatorId: operator["OP-006"].id, tanggal: date("2026-05-22"), jamKerja: 8, fuelLiter: 78, hmAwal: 940, hmAkhir: 948, aktivitas: "Galian saluran drainase.", kendala: null },
+    { contractId: contract["KTR-2026-0004"].id, unitId: unit["EXC-004"].id, operatorId: operator["OP-006"].id, tanggal: date("2026-05-23"), jamKerja: 8.5, fuelLiter: 80, hmAwal: 948, hmAkhir: 956.5, aktivitas: "Perapihan slope saluran.", kendala: null },
+    { contractId: contract["KTR-2026-0005"].id, unitId: unit["DT-011"].id, tanggal: date("2026-05-22"), jamKerja: 8, fuelLiter: 95, hmAwal: 0, hmAkhir: 0, aktivitas: "Angkut material urugan 18 rit.", kendala: null },
+    { contractId: contract["KTR-2026-0006"].id, unitId: unit["VIB-002"].id, operatorId: operator["OP-010"].id, tanggal: date("2026-05-22"), jamKerja: 7, fuelLiter: 62, hmAwal: 1420, hmAkhir: 1427, aktivitas: "Pemadatan akses pelabuhan.", kendala: "Area tergenang 30 menit." },
+    { contractId: contract["KTR-2026-0007"].id, unitId: unit["BLD-003"].id, operatorId: operator["OP-007"].id, tanggal: date("2026-05-24"), jamKerja: 9, fuelLiter: 125, hmAwal: 2985, hmAkhir: 2994, aktivitas: "Cut and fill area persiapan lahan.", kendala: null },
+    { contractId: contract["KTR-2026-0008"].id, unitId: unit["WL-002"].id, operatorId: operator["OP-008"].id, tanggal: date("2026-04-20"), jamKerja: 8, fuelLiter: 70, hmAwal: 760, hmAkhir: 768, aktivitas: "Loading agregat ke batching plant.", kendala: null },
+  ]) {
+    await createDailyReportOnce(report);
+  }
+
+  for (const fuelLog of [
+    { unitId: unit["EXC-002"].id, contractId: contract["KTR-2026-0002"].id, tanggal: date("2026-05-20"), liter: 75, hargaPerLiter: 6900, total: 517500, supplier: "PT Solar Industri Prima", catatan: "Solar site Karawang." },
+    { unitId: unit["EXC-002"].id, contractId: contract["KTR-2026-0002"].id, tanggal: date("2026-05-21"), liter: 82, hargaPerLiter: 6900, total: 565800, supplier: "PT Solar Industri Prima", catatan: "Top up sore." },
+    { unitId: unit["BLD-002"].id, contractId: contract["KTR-2026-0003"].id, tanggal: date("2026-05-20"), liter: 115, hargaPerLiter: 7200, total: 828000, supplier: "Vendor Site Morowali", catatan: "Solar tambang." },
+    { unitId: unit["EXC-004"].id, contractId: contract["KTR-2026-0004"].id, tanggal: date("2026-05-22"), liter: 78, hargaPerLiter: 7100, total: 553800, supplier: "Solar Kaltim", catatan: "Pengisian pagi." },
+    { unitId: unit["DT-011"].id, contractId: contract["KTR-2026-0005"].id, tanggal: date("2026-05-22"), liter: 95, hargaPerLiter: 6900, total: 655500, supplier: "PT Solar Industri Prima", catatan: "Operasional dump truck." },
+    { unitId: unit["VIB-002"].id, contractId: contract["KTR-2026-0006"].id, tanggal: date("2026-05-22"), liter: 62, hargaPerLiter: 6900, total: 427800, supplier: "PT Solar Industri Prima", catatan: "Vibro roller." },
+  ]) {
+    await createFuelLogOnce(fuelLog);
+  }
+
+  const owner = await prisma.user.findUnique({ where: { username: "owner" } });
+  await createAttachmentOnce({ entityType: "Invoice", entityId: invoice["INV-2026-0002"].id, fileName: "INV-2026-0002.pdf", fileUrl: "/documents/invoices/INV-2026-0002.pdf", fileType: "application/pdf", uploadedBy: owner?.id });
+  await createAttachmentOnce({ entityType: "RentalContract", entityId: contract["KTR-2026-0004"].id, fileName: "KTR-2026-0004-signed.pdf", fileUrl: "/documents/contracts/KTR-2026-0004-signed.pdf", fileType: "application/pdf", uploadedBy: owner?.id });
+  await createAuditLogOnce({ userId: owner?.id, action: "seed.expanded", entityType: "Seed", entityId: 202605, metadata: { batch: "expanded-demo-data", records: "masters-transactions" } });
+}
+
+async function seedExpandedMaintenanceAndHpp() {
+  const [units, suppliers, spareparts] = await Promise.all([
+    prisma.equipmentUnit.findMany(),
+    prisma.supplier.findMany(),
+    prisma.sparepart.findMany(),
+  ]);
+  const unit = Object.fromEntries(units.map((item) => [item.kodeLambung, item]));
+  const supplier = Object.fromEntries(suppliers.map((item) => [item.kode, item]));
+  const sparepart = Object.fromEntries(spareparts.map((item) => [item.kode, item]));
+
+  await prisma.maintenanceOrder.createMany({
+    data: [
+      { noWo: "WO-2026-0002", unitId: unit["EXC-003"].id, tipe: "Rutin", tanggalMulai: date("2026-05-02"), tanggalSelesai: date("2026-05-03"), hmService: 420, deskripsi: "Service berkala 500 HM dan penggantian filter.", mekanik: "Tim Pool", supplierId: supplier["SUP-FILTER"].id, status: "Done", totalBiaya: 5120000, catatan: "Unit siap standby." },
+      { noWo: "WO-2026-0003", unitId: unit["GRD-001"].id, tipe: "Perbaikan", tanggalMulai: date("2026-05-04"), tanggalSelesai: null, hmService: 5125, deskripsi: "Perbaikan hydraulic blade dan pengecekan hose.", mekanik: "Hydraulic Center", supplierId: supplier["SUP-HYD"].id, status: "Open", totalBiaya: 8750000, catatan: "Menunggu seal kit." },
+      { noWo: "WO-2026-0004", unitId: unit["BLD-003"].id, tipe: "Rutin", tanggalMulai: date("2026-05-17"), tanggalSelesai: date("2026-05-17"), hmService: 2985, deskripsi: "Pengecekan undercarriage sebelum masuk site IKN.", mekanik: "Tim Kaltim", supplierId: supplier["SUP-TRACK"].id, status: "Done", totalBiaya: 6400000, catatan: "Track masih layak operasi." },
+      { noWo: "WO-2026-0005", unitId: unit["DT-012"].id, tipe: "Perbaikan", tanggalMulai: date("2026-05-12"), tanggalSelesai: date("2026-05-13"), hmService: 0, deskripsi: "Ganti aki dan service kelistrikan dump truck.", mekanik: "Tim Pool", supplierId: supplier["SUP-BATTERY"].id, status: "Done", totalBiaya: 3150000, catatan: "Unit kembali standby." },
+    ],
+    skipDuplicates: true,
+  });
+
+  const workOrders = await prisma.maintenanceOrder.findMany();
+  const workOrder = Object.fromEntries(workOrders.map((item) => [item.noWo, item]));
+  const partsByWorkOrder = {
+    "WO-2026-0002": [
+      { sparepartId: sparepart["SP-AIR-FILTER"].id, namaPart: "Air Filter Heavy Duty", supplierNama: "Prima Filter Nusantara", harga: 680000, qty: 2, satuan: "PCS", total: 1360000 },
+      { sparepartId: sparepart["SP-FUEL-FILTER"].id, namaPart: "Fuel Filter Heavy Duty", supplierNama: "Prima Filter Nusantara", harga: 520000, qty: 2, satuan: "PCS", total: 1040000 },
+      { sparepartId: sparepart["SP-OIL-15W40"].id, namaPart: "Engine Oil 15W-40", supplierNama: "Mega Oli Diesel", harga: 1650000, qty: 1, satuan: "PAIL", total: 1650000 },
+    ],
+    "WO-2026-0003": [
+      { sparepartId: sparepart["SP-SEAL-HYD"].id, namaPart: "Seal Kit Hydraulic Cylinder", supplierNama: "Hydraulic Center Bekasi", harga: 2750000, qty: 2, satuan: "SET", total: 5500000 },
+      { sparepartId: sparepart["SP-HYD-68"].id, namaPart: "Hydraulic Oil AW 68", supplierNama: "Mega Oli Diesel", harga: 5850000, qty: 0.5, satuan: "DRUM", total: 2925000 },
+    ],
+    "WO-2026-0004": [
+      { sparepartId: sparepart["SP-CUTTING-EDGE"].id, namaPart: "Cutting Edge Dozer", supplierNama: "Track Shoe Specialist", harga: 7200000, qty: 0.5, satuan: "SET", total: 3600000 },
+      { sparepartId: sparepart["SP-GREASE"].id, namaPart: "Grease EP2", supplierNama: "Mega Oli Diesel", harga: 890000, qty: 1, satuan: "PAIL", total: 890000 },
+    ],
+    "WO-2026-0005": [
+      { sparepartId: sparepart["SP-AKI-150"].id, namaPart: "Battery N150", supplierNama: "Aki Jaya Mandiri", harga: 2350000, qty: 1, satuan: "PCS", total: 2350000 },
+    ],
+  };
+
+  for (const [noWo, parts] of Object.entries(partsByWorkOrder)) {
+    if ((await prisma.maintenancePart.count({ where: { maintenanceOrderId: workOrder[noWo].id } })) === 0) {
+      await prisma.maintenancePart.createMany({
+        data: parts.map((part) => ({ ...part, maintenanceOrderId: workOrder[noWo].id })),
+      });
+    }
+  }
+
+  await prisma.unitSaleHpp.createMany({
+    data: [
+      { noLaporan: "HPP-EXC003-2026", unitId: unit["EXC-003"].id, tanggal: date("2026-05-04"), hppPembelian: 925000000, biayaPerbaikan: 5120000, biayaMekanik: 1500000, biayaCat: 0, biayaLas: 0, biayaKebersihan: 750000, totalHpp: 932370000, hargaJual: 985000000, labaRugi: 52630000, catatan: "Simulasi HPP unit standby siap jual." },
+      { noLaporan: "HPP-DT012-2026", unitId: unit["DT-012"].id, tanggal: date("2026-05-14"), hppPembelian: 545000000, biayaPerbaikan: 3150000, biayaMekanik: 850000, biayaCat: 0, biayaLas: 0, biayaKebersihan: 450000, totalHpp: 549450000, hargaJual: 575000000, labaRugi: 25550000, catatan: "Simulasi HPP dump truck." },
+    ],
+    skipDuplicates: true,
+  });
+
+  const owner = await prisma.user.findUnique({ where: { username: "owner" } });
+  await createAttachmentOnce({ entityType: "MaintenanceOrder", entityId: workOrder["WO-2026-0003"].id, fileName: "foto-hydraulic-grd001.jpg", fileUrl: "/documents/maintenance/foto-hydraulic-grd001.jpg", fileType: "image/jpeg", uploadedBy: owner?.id });
+  await createAuditLogOnce({ userId: owner?.id, action: "maintenance.seed.expanded", entityType: "MaintenanceOrder", entityId: workOrder["WO-2026-0003"].id, metadata: { status: "Open", unit: "GRD-001" } });
+}
+
 async function main() {
   await seedRbac();
   await seedMasters();
+  await seedExpandedMasters();
   await seedTransactions();
+  await seedExpandedTransactions();
   await seedMaintenanceAndHpp();
+  await seedExpandedMaintenanceAndHpp();
   console.log("Seed data sewa alat berat selesai.");
 }
 
